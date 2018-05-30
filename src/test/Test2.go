@@ -1,4 +1,4 @@
-package main
+package test
 
 import "fmt"
 
@@ -12,7 +12,7 @@ func main() {
 	var o interface{}
 	switch i := o.(type) {
 	case nil:
-		fmt.Printf(" o 的类型 :%T",i)
+		fmt.Printf(" o 的类型 :%T", i)
 	case int:
 		fmt.Printf("o 是 int 型")
 	case float64:
@@ -20,7 +20,7 @@ func main() {
 	case func(int) float64:
 		fmt.Printf("o 是 func(int) 型")
 	case bool, string:
-		fmt.Printf("o 是 bool 或 string 型" )
+		fmt.Printf("o 是 bool 或 string 型")
 	default:
 		fmt.Printf("未知型")
 	}
@@ -53,7 +53,6 @@ func main() {
 		fmt.Println("default!.")
 	}
 
-
 	// for循环
 	//for init; condition; post { } 普通的for
 	//for condition { }  相当于while
@@ -61,31 +60,30 @@ func main() {
 
 	// 函数定义
 	/*
-	func function_name( [parameter list] ) [return_types] {
-		函数体
-	}
+		func function_name( [parameter list] ) [return_types] {
+			函数体
+		}
 	*/
 
 	//多个返回值函数
 	x, y := swap("zzz", "xxx")
-	println(x,y)
+	println(x, y)
 
 	// 闭包，将函数作为对象（有权访问另一个函数作用域内变量的函数都是闭包）
-	addFunc := add(1,2)
-	i1,i2 := addFunc()
-	println(i1,i2)
-
+	addFunc := add(1, 2)
+	i1, i2 := addFunc()
+	println(i1, i2)
 
 	//全局变量与局部变量名称可以相同，但是函数内的局部变量会被优先考虑
 
 }
 
 // 闭包使用方法
-func add(x1, x2 int) func()(int,int)  {
+func add(x1, x2 int) func() (int, int) {
 	i := 0
-	return func() (int,int){
+	return func() (int, int) {
 		i++
-		return i,x1+x2
+		return i, x1 + x2
 	}
 }
 
@@ -99,7 +97,7 @@ func max(num1, num2 int) int {
 	/* 声明局部变量 */
 	var result int
 
-	if (num1 > num2) {
+	if num1 > num2 {
 		result = num1
 	} else {
 		result = num2

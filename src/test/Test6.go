@@ -1,4 +1,4 @@
-package main
+package test
 
 import "fmt"
 
@@ -20,8 +20,7 @@ func (iPhone IPhone) call() {
 	fmt.Println("I am iPhone, I can call you!")
 }
 
-
-func main(){
+func main() {
 	// 接口
 
 	// go中的接口，是在创建对象的时候进行绑定
@@ -32,4 +31,6 @@ func main(){
 
 	phone = new(IPhone)
 	phone.call()
+
+	// defer关键字，类似java中的finlly，在函数返回前，执行一些操作。注意，它的执行顺序是逆序的
 }

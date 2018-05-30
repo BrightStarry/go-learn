@@ -1,4 +1,4 @@
-package main
+package test
 
 import (
 	"fmt"
@@ -27,7 +27,7 @@ func main() {
 	// 结构类型声明
 	type user struct{}
 	// 接口声明
-	type userInterface interface {}
+	type userInterface interface{}
 
 	// 基本类型
 	var a bool = true
@@ -53,7 +53,7 @@ func main() {
 
 	// 这种因式分解关键字的写法一般用于声明全局变量
 	var (
-		c1 int = 3
+		c1 int    = 3
 		c2 string = "dfd"
 	)
 
@@ -62,37 +62,36 @@ func main() {
 	var count int = 5
 	var mean float32
 
-	mean = float32(sum)/float32(count)
-	fmt.Printf("mean 的值为: %f\n",mean)
+	mean = float32(sum) / float32(count)
+	fmt.Printf("mean 的值为: %f\n", mean)
 
 	// 多个变量可以再同一行赋值
 	//var a, b int
 	//var c string
 	//a, b, c = 5, 7, "abc"
 
-
 	// 上面这些基本类型都属于值类型
 	// 可用如下方法获取变量的内存地址
 	fmt.Println(&a)
 	// 以下，是通过取得的地址，获取值，也就是一个指针，指向a的内存地址
 	aPointer := &a
-	fmt.Println(*aPointer)//此处输出a的值
+	fmt.Println(*aPointer) //此处输出a的值
 
 	// 交换两个变量的值,必须同类型
-	b,c1 = c1,b
+	b, c1 = c1, b
 	// _ 空白标识符，可以将值赋给一个被抛弃的变量
-	_,c1 = 5,6
+	_, c1 = 5, 6
 
 	// 并行赋值也可用于获取一个函数返回的多个返回值
 	//	val, err = Func1(var1)
 
-	fmt.Println(a,b,b1,b2,c,d,e,f,g,vname1,vname2,vname3,c1,c2)
+	fmt.Println(a, b, b1, b2, c, d, e, f, g, vname1, vname2, vname3, c1, c2)
 
 	// 常量可用于枚举
 	const (
 		Unknown = 0
-		Female = 1
-		Male = 2
+		Female  = 1
+		Male    = 2
 	)
 
 	//常量可以用len(), cap(), unsafe.Sizeof()函数计算表达式的值。常量表达式中，函数必须是内置函数，否则编译不过：
@@ -101,9 +100,8 @@ func main() {
 		bbb = len(aaa)
 		ccc = unsafe.Sizeof(aaa)
 	)
-	println(aaa,bbb,ccc)
+	println(aaa, bbb, ccc)
 	// ccc值为16，字符串类型在 go 里是个结构, 包含指向底层数组的指针和长度,这两部分每部分都是 8 个字节，所以字符串类型大小为 16 个字节。
-
 
 	//iota，特殊常量，可以认为是一个可以被编译器修改的常量。
 	//iota在const关键字出现时将被重置为0(const内部的第一行之前)，const中每新增一行常量声明将使iota计数一次(iota可理解为const语句块中的行索引)。
@@ -111,18 +109,18 @@ func main() {
 
 	type AudioOutput int
 	const (
-		OutMute AudioOutput = iota // 0
-		OutMono                    // 1
-		OutStereo                  // 2
+		OutMute   AudioOutput = iota // 0
+		OutMono                      // 1
+		OutStereo                    // 2
 		_
 		_
-		OutSurround                // 5
+		OutSurround // 5
 	)
 
 	type Allergen int
 
 	const (
-		IgEggs Allergen = 1 << iota // 1 << 0 which is 00000001
+		IgEggs         Allergen = 1 << iota // 1 << 0 which is 00000001
 		IgChocolate                         // 1 << 1 which is 00000010
 		IgNuts                              // 1 << 2 which is 00000100
 		IgStrawberries                      // 1 << 3 which is 00001000
@@ -132,14 +130,14 @@ func main() {
 	type ByteSize float64
 
 	const (
-		_           = iota                   // ignore first value by assigning to blank identifier
+		_           = iota             // ignore first value by assigning to blank identifier
 		KB ByteSize = 1 << (10 * iota) // 1 << (10*1)
-		MB                                   // 1 << (10*2)
-		GB                                   // 1 << (10*3)
-		TB                                   // 1 << (10*4)
-		PB                                   // 1 << (10*5)
-		EB                                   // 1 << (10*6)
-		ZB                                   // 1 << (10*7)
-		YB                                   // 1 << (10*8)
+		MB                             // 1 << (10*2)
+		GB                             // 1 << (10*3)
+		TB                             // 1 << (10*4)
+		PB                             // 1 << (10*5)
+		EB                             // 1 << (10*6)
+		ZB                             // 1 << (10*7)
+		YB                             // 1 << (10*8)
 	)
 }

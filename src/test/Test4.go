@@ -1,8 +1,8 @@
-package main
+package test
 
 import "fmt"
 
-func main(){
+func main() {
 	// 切片（动态数组）,
 	// 定义切片,此时 a == nil
 	//var a []int
@@ -13,9 +13,8 @@ func main(){
 	// 初始化切片 cap=len=3
 	//a := []int{1,2,3}
 
-
 	// 数组
-	var arr1 = []int{1,2,3}
+	var arr1 = []int{1, 2, 3}
 	// 将arr1的引用作为 切片
 	//a := arr1[:]
 	// 将arr1的 下标从 0到2，取头不取尾（不包含2），作为索引
@@ -29,10 +28,7 @@ func main(){
 	println(len(a))
 	// 切片容量 3
 	println(cap(a))
-	fmt.Printf("%v",a)
-
-
-
+	fmt.Printf("%v", a)
 
 	var numbers []int
 	printSlice(numbers)
@@ -46,16 +42,15 @@ func main(){
 	printSlice(numbers)
 
 	/* 同时添加多个元素 */
-	numbers = append(numbers, 2,3,4)
+	numbers = append(numbers, 2, 3, 4)
 	printSlice(numbers)
 
 	/* 创建切片 numbers1 是之前切片的两倍容量*/
 	numbers1 := make([]int, len(numbers), (cap(numbers))*2)
 
 	/* 拷贝 numbers 的内容到 numbers1 */
-	copy(numbers1,numbers)
+	copy(numbers1, numbers)
 	printSlice(numbers1)
-
 
 	// range关键字，用于在for中迭代 array，slice，channel，map（返回key）等
 
@@ -83,6 +78,6 @@ func main(){
 	}
 }
 
-func printSlice(x []int){
-	fmt.Printf("len=%d cap=%d slice=%v\n",len(x),cap(x),x)
+func printSlice(x []int) {
+	fmt.Printf("len=%d cap=%d slice=%v\n", len(x), cap(x), x)
 }
