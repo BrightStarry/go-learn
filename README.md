@@ -7,3 +7,4 @@
 
 #### bug
 - runnerw.exe: CreateProcess failed with error 216:    修改package main即可
+- 函数名和 类库名相同，会有bug
