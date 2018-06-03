@@ -8,3 +8,7 @@
 #### bug
 - runnerw.exe: CreateProcess failed with error 216:    修改package main即可
 - 函数名和 类库名相同，会有bug
+
+
+#### 要点
+- 有些方法接收的参数是指针，则表示该方法中，可以改变该参数的引用的值。否则是值传递。
