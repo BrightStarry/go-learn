@@ -204,7 +204,7 @@ func anyEncode(data interface{})(item string) {
 	case map[string]interface{}:
 		item = DictEncode(value)
 	default:
-		panic("编码:无效类型")
+		panic("任意编码:无效类型")
 	}
 	return
 }
