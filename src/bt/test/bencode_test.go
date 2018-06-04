@@ -18,8 +18,11 @@ func TestEncode(t *testing.T) {
 	var testMap = make(map[string]interface{})
 	testMap["a"] = 343
 	testMap["b"] = "zx"
-	testList := make([]interface{},1)
-	testList= append(testList,"1")
+	testList := make([]interface{},3)
+	testList[0] = "3"
+	testList[1] = 34
+	testList[2] = 133
+
 
 	testMap["c"] = testList
 
