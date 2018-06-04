@@ -1,6 +1,0 @@
-package test
-
-
-func main() {
-
-}

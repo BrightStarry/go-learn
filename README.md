@@ -12,3 +12,35 @@
 
 #### 要点
 - 有些方法接收的参数是指针，则表示该方法中，可以改变该参数的引用的值。否则是值传递。
+- 当方法参数接收的是指针类型时，出现方法都无法调用，是因为该指针类型的原类型是接口，将其改为实现类即可（例如net.Conn改为net.TcpConn）
+- 测试文件必须以_test结尾，然后在方法中添加参数t *testing.T
+#### 跨平台编译
+~~~
+在根目录执行
+set GOOS=linux
+set GOARCH=amd64
+然后再执行其他命令
+
+要恢复的话执行
+set GOOS=windows
+set GOARCH=amd64
+
+也可以直接如下，构建出linux的执行文件
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build HTTPServer.go
+~~~
+
+
+#### 多main编译
+```
+对于如下目录结构
+-GOPATH
+    -src
+        -bt
+            -main
+            -util
+        -web
+            -main
+            -util
+如果想要install bt中的main，需要在根目录执行
+go install bt/main
+```
