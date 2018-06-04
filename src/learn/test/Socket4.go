@@ -1,8 +1,8 @@
-package test
+package main
 
 import (
 	"net"
-	"util"
+	"learn/util"
 	"io/ioutil"
 	"time"
 )

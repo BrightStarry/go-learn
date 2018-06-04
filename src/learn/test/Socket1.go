@@ -1,4 +1,4 @@
-package test
+package main
 
 import (
 	"net"
@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"io"
 	"bufio"
-	"util"
+	"learn/util"
 )
 
 func main() {
