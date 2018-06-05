@@ -69,21 +69,37 @@ func Merge( in1, in2 <-chan int) <-chan int {
 	return out
 }
 
-/*读取元数据到一个通道*/
-func ReaderSource(reader *bufio.Reader) <-chan int{
+/*归并n个节点*/
+func MergeN(inputs ...<-chan int) <-chan int {
+	// 一个，直接返回
+	if len(inputs) == 1 {
+		return inputs[0]
+	}
+	// 大于一个，且分为两半，进行递归归并操作
+	m := len(inputs) / 2
+	// input[0..m) and inputs [m..end)
+	return Merge(MergeN(inputs[:m]...),MergeN(inputs[m:]...))
+}
+
+/*读取元数据到一个通道,并且可以分块读取*/
+func ReaderSource(reader *bufio.Reader, chunkSize int) <-chan int{
 	out := make(chan int)
 	go func() {
 		defer close(out)
 		// 缓冲区，每次读取 64bit
 		buffer := make([]byte,8)
+		bytesRead := 0
 		for{
 			n,err :=reader.Read(buffer)
+			bytesRead += n
 			if n > 0 {
 				// 将64bit转为int
 				v := int( binary.BigEndian.Uint64(buffer))
 				out <- v
 			}
-			if err != nil {
+			// 如果异常，或者超出指定块大小，则停止读取
+			if err != nil ||
+				(chunkSize != -1 && bytesRead >= chunkSize){
 				break
 			}
 		}
