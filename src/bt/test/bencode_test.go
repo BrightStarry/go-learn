@@ -18,8 +18,11 @@ func TestEncode(t *testing.T) {
 	var testMap = make(map[string]interface{})
 	testMap["a"] = 343
 	testMap["b"] = "zx"
-	testList := make([]interface{},1)
-	testList= append(testList,"1")
+	testList := make([]interface{},3)
+	testList[0] = "3"
+	testList[1] = 34
+	testList[2] = 133
+
 
 	testMap["c"] = testList
 
@@ -32,5 +35,16 @@ func TestEncode(t *testing.T) {
 		fmt.Println("异常:",err)
 	}
 	fmt.Println(result2)
+
+
+
+	a := util.Encode(
+		map[string]interface{}{
+			"m":map[string]interface{}{
+				"ut_metadata": 1,
+			},
+		},
+	)
+	fmt.Println(a)
 
 }
