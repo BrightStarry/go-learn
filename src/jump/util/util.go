@@ -82,11 +82,7 @@ func addTargetConn(key string,targetConn *net.TCPConn) {
 
 /*[]byte转ip 字符串*/
 func Bytes2Ip(data []byte) string {
-	var b  bytes.Buffer
-	for _,v := range data{
-		b.WriteString("." + strconv.Itoa(int(v)))
-	}
-	return b.String()[1:]
+	return net.IPv4(data[0],data[1],data[2],data[3]).String()
 }
 
 /*
