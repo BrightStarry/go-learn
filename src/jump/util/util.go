@@ -1,13 +1,14 @@
 package util
 
 import (
-	"encoding/binary"
 	"bytes"
 	"errors"
 	"net"
 	"time"
 	"strconv"
 	"strings"
+	"unsafe"
+	"encoding/binary"
 )
 
 /*工具类*/
@@ -47,7 +48,7 @@ func readMessageByReader(reader *bytes.Reader,defaultLen int) ( []byte, int, err
 func sendResponse(conn *net.TCPConn,data interface{})(err error) {
 	// 设置超时时间
 	conn.SetWriteDeadline(time.Now().Add(WriteTimeout))
-	// 发送对象
+	// 发送对象， 该方法的data支持定长的类型（切片等都需要定长）
 	err = binary.Write(conn,binary.LittleEndian,data)
 	return
 }
@@ -91,12 +92,14 @@ func Bytes2Ip(data []byte) string {
 /*
 	地址字符串转ip([]byte) 和 port(uint16)
 	类似 192.168.1.111:54698, 如果没有端口，返回0
+
+	注意，该方法返回的切片是定长的
 */
 func Ip2Bytes(addr string) (ip []byte,port uint16) {
 	// 转为 ["192.168.1.111","54698"] 或 （如果没有端口）["192.168.1.111"]
 	arr := strings.Split(addr,":")
 
-	ip = make([]byte,4)
+	ip = make([]byte,4,4)
 	// ip
 	// 转为  ["192","168","1","111"]
 	ips := strings.Split(arr[0],".")
@@ -113,4 +116,9 @@ func Ip2Bytes(addr string) (ip []byte,port uint16) {
 	v3,_ := strconv.Atoi(arr[1])
 	port = uint16(v3)
 	return
+}
+
+/*对象转[]byte*/
+func Struct2Bytes(data interface{}) []byte{
+	return *(*[]byte)(unsafe.Pointer(&data))
 }

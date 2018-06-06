@@ -7,8 +7,9 @@ import (
 	"errors"
 	"bytes"
 	"sync"
-	"strconv"
 	"log"
+	"fmt"
+	"strconv"
 )
 
 /*socket相关*/
@@ -44,21 +45,48 @@ func StartTcpServer(port string) {
 */
 func HandlerTcpConn(conn *net.TCPConn) {
 	//// 如果是密码认证
-	//if util.Config.Method == util.PwdMethod {
+	//if Config.Method == PwdMethod {
 	//	// 获取该用户信息
-	//	_,ok := util.AuthenticationUser[conn.RemoteAddr().String()]
+	//	_,ok := AuthenticationUser[conn.RemoteAddr().String()]
 	//	// 不存在
 	//	if !ok{
 	//		// 进行预处理（握手等）
-	//		util.HandlerPre(conn)
+	//		HandlerPre(conn)
 	//	}
 	//}else {
 	//	// 如果是无需验证
-	//	util.HandlerPre(conn)
+	//	HandlerPre(conn)
 	//}
 
-	HandlerPre(conn)
-	HandlerConnect(conn)
+	err := HandlerPre(conn)
+	if err != nil {
+		log.Println(err)
+		defer conn.Close()
+		return
+	}
+	err = HandlerConnect(conn)
+	if err != nil {
+		log.Println(err)
+		defer conn.Close()
+		return
+	}
+
+for{
+	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
+	buf := make([]byte,4096)
+	n,err := conn.Read(buf)
+	if err != nil {
+		fmt.Println(err)
+		defer func() {
+			conn.Close()
+			delete(userTargetMap,conn.RemoteAddr().String())
+		}()
+		return
+	}
+	fmt.Println(n)
+	fmt.Printf(string(n))
+}
+
 }
 
 
@@ -241,13 +269,16 @@ func HandlerConnect(conn *net.TCPConn) (error) {
 
 	// 连接成功
 	response.Response = Zero
-	response.Address,request.Port = Ip2Bytes(targetConn.LocalAddr().String())
-	err = sendResponse(conn,response)
+	response.Address,response.Port = Ip2Bytes(targetConn.LocalAddr().String())
+
+	//err = sendResponse(conn,response)
+	buf := response.ToBytes()
+	_,err = conn.Write(buf)
 	if err != nil {
 		return nil
 	}
-	// TODO
-	addTargetConn(conn.RemoteAddr().String())
+	// 暂存这个连接
+	addTargetConn(conn.RemoteAddr().String(),targetConn)
 
 	return nil
 }
@@ -351,12 +382,17 @@ func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest,err error) {
 	}else {
 		request.Address = Bytes2Ip(request.AddressBytes)
 	}
+
 	// 拼接完成目标地址
 	if request.Port != 0 {
 		request.Target = request.Address + ":" + strconv.Itoa(int(request.Port))
-	}else {
+	}else if request.AddressType == DomainName{
+		// 如果是域名的形式，并且端口为0，自动加上80端口
+		request.Target = request.Address + ":80"
+	}else{
 		request.Target = request.Address
 	}
+
 
 	return
 }

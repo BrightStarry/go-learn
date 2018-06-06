@@ -1,5 +1,7 @@
 package util
 
+import "bytes"
+
 /*网络传输对象*/
 
 /*
@@ -75,6 +77,7 @@ type ConnectRequest struct{
 	// 目标，直接将地址和端口拼接
 	Target string
 
+
 }
 
 /*
@@ -98,6 +101,17 @@ type ConnectResponse struct{
 	Address []byte
 	// 服务端连接到目标服务器时，服务端的端口
 	Port uint16
+}
+
+func (this ConnectResponse)ToBytes() []byte {
+	buf := bytes.NewBuffer(nil)
+	buf.WriteByte(byte(this.Version))
+	buf.WriteByte( byte(this.Response))
+	buf.WriteByte( byte(this.Reserve))
+	buf.WriteByte( byte(this.AddressType))
+	buf.Write(this.Address[:])
+	buf.WriteByte(byte(this.Port))
+	return buf.Bytes()
 }
 
 /*用户信息*/
