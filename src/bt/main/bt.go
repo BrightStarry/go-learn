@@ -49,7 +49,7 @@ func main() {
 	//bytes := hexInfoHashToByte("eb8abb5d2b4711b4d545b9d0ebb05f22b63f5ca3")
 	//fmt.Println(bytes)
 
-	r := Request{"7ac05fc84bdf9f25fed2df8485a8160194972dd0","154.45.216.216:2308"}
+	r := Request{"17c67edaf5150b2ee247065808f70c2a59855712","34.243.239.80:8110"}
 	metadata,err := fetchMetadata(r)
 	if err != nil {
 		fmt.Println("异常：",err)
