@@ -45,3 +45,6 @@ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build HTTPServer.go
 如果想要install bt中的main，需要在根目录执行
 go install bt/main
 ```
+
+#### 奇淫巧技
+- goland快捷键： C+A+v ,快速生成方法返回对象
