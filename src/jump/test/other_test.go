@@ -17,5 +17,5 @@ func TestIp(t *testing.T) {
 
 	data := [4]byte{12,12,12,12}
 	s := net.IPv4(data[0],data[1],data[2],data[3]).String()
-	log.Println(s)
+	DebugLog.Println(s)
 }

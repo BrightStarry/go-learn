@@ -20,9 +20,9 @@ import (
 func main() {
 	//base()
 	//structOfXml()
-	//osOfArgs()
+	osOfArgs()
 	//parseXml()
-	cp()
+	//cp()
 }
 
 /*字符串基本操作*/

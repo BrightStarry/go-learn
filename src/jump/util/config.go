@@ -2,6 +2,7 @@ package util
 
 import (
 	"time"
+	"fmt"
 )
 
 // 认证模式
@@ -31,13 +32,14 @@ const(
 	// 表示不支持客户端的认证方式
 	NotSupport = 0xff
 	// 读取超时时间
-	ReadTimeout = 10 * time.Second
+	ReadTimeout = 15 * time.Second
 	// 数据发送超时时间
-	WriteTimeout = 10 * time.Second
+	WriteTimeout = 15 * time.Second
 )
 
 // 配置
 var Config = NewDefaultConfig()
+
 
 /*系统配置*/
 type Configuration struct{
@@ -49,6 +51,17 @@ type Configuration struct{
 	Port string
 	// 当前认证模式
 	Method byte
+
+}
+
+/*toString方法*/
+func (this Configuration) String() string {
+	if this.Method == UnMethod {
+		return fmt.Sprintln("认证模式:",UnMethodName,",端口:",this.Port)
+	}else{
+		return fmt.Sprintln("认证模式:",PwdMethodName,",端口:",this.Port,",用户名:",this.Username,",密码:",this.Password)
+	}
+
 }
 
 /*构造默认的系统配置*/

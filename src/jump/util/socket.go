@@ -6,9 +6,9 @@ import (
 	"encoding/binary"
 	"errors"
 	"bytes"
-	"log"
 	"io"
 	"strconv"
+	"log"
 )
 
 /*socket相关*/
@@ -22,13 +22,13 @@ func StartTcpServer(port string) {
 	if err != nil {
 		log.Fatalln("服务启动失败:", err)
 	}
-	log.Println("服务启动成功,地址:", listener.Addr().String())
+	log.Println("服务启动成功!")
 	defer listener.Close()
 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Fatalln("接受客户端连接失败:", err)
+			log.Println("接受客户端连接失败:", err)
 		}
 		log.Println("接受客户端连接:", conn.RemoteAddr().String())
 		// 处理请求

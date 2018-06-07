@@ -114,3 +114,5 @@ func Ip2Bytes(addr string) (ip []byte,port uint16) {
 func Struct2Bytes(data interface{}) []byte{
 	return *(*[]byte)(unsafe.Pointer(&data))
 }
+
+
