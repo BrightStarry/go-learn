@@ -1,6 +1,9 @@
 package util
 
-import "bytes"
+import (
+	"bytes"
+	"encoding/binary"
+)
 
 /*网络传输对象*/
 
@@ -110,8 +113,16 @@ func (this ConnectResponse)ToBytes() []byte {
 	buf.WriteByte( byte(this.Reserve))
 	buf.WriteByte( byte(this.AddressType))
 	buf.Write(this.Address[:])
-	buf.WriteByte(byte(this.Port))
+	// uint16转[]byte
+	portBytes := bytes.NewBuffer(nil)
+	binary.Write(portBytes,binary.BigEndian,this.Port)
+	buf.Write(portBytes.Bytes())
 	return buf.Bytes()
+}
+
+/*可转为数组接口*/
+type Byteable interface {
+	ToBytes() []byte
 }
 
 /*用户信息*/

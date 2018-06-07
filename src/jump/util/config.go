@@ -2,15 +2,16 @@ package util
 
 import (
 	"time"
-	"net"
 )
 
 // 认证模式
 const(
 	// 无需认证
 	UnMethod = 0x00
+	UnMethodName = "no"
 	// 密码认证
 	PwdMethod = 0x02
+	PwdMethodName = "pwd"
 )
 
 // 地址类型
@@ -36,11 +37,7 @@ const(
 )
 
 // 配置
-var Config Configuration = NewDefaultConfig()
-// 已认证用户
-var AuthenticationUser = make(map[string]User)
-// 用户对应的已连接对象
-var userTargetMap = make(map[string]*net.TCPConn)
+var Config = NewDefaultConfig()
 
 /*系统配置*/
 type Configuration struct{
@@ -52,7 +49,6 @@ type Configuration struct{
 	Port string
 	// 当前认证模式
 	Method byte
-	//
 }
 
 /*构造默认的系统配置*/

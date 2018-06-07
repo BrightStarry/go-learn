@@ -72,7 +72,7 @@ func sampleReadStdin() {
 
 /*从文件中读取字节*/
 func sampleReadFile() {
-	file,_ := os.Open("H:\\goSpace\\go-learn\\bin\\main.exe")
+	file,_ := os.Open("H:\\goSpace\\go-learn\\bin\\jump.exe")
 	defer file.Close()
 	bytes,_ := ReadFrom(file,100)
 	fmt.Println("读取到:",bytes)

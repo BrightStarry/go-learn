@@ -48,8 +48,15 @@ func readMessageByReader(reader *bytes.Reader,defaultLen int) ( []byte, int, err
 func sendResponse(conn *net.TCPConn,data interface{})(err error) {
 	// 设置超时时间
 	conn.SetWriteDeadline(time.Now().Add(WriteTimeout))
-	// 发送对象， 该方法的data支持定长的类型（切片等都需要定长）
-	err = binary.Write(conn,binary.LittleEndian,data)
+
+	switch data.(type) {
+	case Byteable:
+		_,err = conn.Write(data.(Byteable).ToBytes())
+	default:
+		// 发送对象， 该方法的data支持定长的类型（切片等都需要定长）
+		err = binary.Write(conn,binary.LittleEndian,data)
+	}
+
 	return
 }
 
@@ -68,17 +75,6 @@ func readByLenField(reader *bytes.Reader) (length byte,data []byte,err error) {
 	return
 }
 
-/*增加用户到map*/
-func addUser(user User) {
-	userLock.Lock()
-	AuthenticationUser[user.Ip] = user
-	userLock.Unlock()
-}
-
-/*增加连接到map*/
-func addTargetConn(key string,targetConn *net.TCPConn) {
-	userTargetMap[key] = targetConn
-}
 
 /*[]byte转ip 字符串*/
 func Bytes2Ip(data []byte) string {

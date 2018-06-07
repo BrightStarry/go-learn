@@ -6,35 +6,31 @@ import (
 	"encoding/binary"
 	"errors"
 	"bytes"
-	"sync"
 	"log"
-	"fmt"
+	"io"
 	"strconv"
 )
 
 /*socket相关*/
-
-// 用于增加用户到map的锁
-var userLock = new(sync.Mutex)
-
 
 
 /*
 	启动tcp服务
 */
 func StartTcpServer(port string) {
-	listener,err  := net.Listen("tcp",":" + port)
+	listener, err := net.Listen("tcp", ":"+port)
 	if err != nil {
-		log.Fatalln("服务启动失败:",err)
+		log.Fatalln("服务启动失败:", err)
 	}
-	log.Println("服务启动成功,地址:",listener.Addr().String())
+	log.Println("服务启动成功,地址:", listener.Addr().String())
 	defer listener.Close()
 
-	for{
-		conn,err  := listener.Accept()
+	for {
+		conn, err := listener.Accept()
 		if err != nil {
-			log.Fatalln("接受客户端连接失败:",err)
+			log.Fatalln("接受客户端连接失败:", err)
 		}
+		log.Println("接受客户端连接:", conn.RemoteAddr().String())
 		// 处理请求
 		go HandlerTcpConn(conn.(*net.TCPConn))
 	}
@@ -44,52 +40,18 @@ func StartTcpServer(port string) {
 	处理tcp请求
 */
 func HandlerTcpConn(conn *net.TCPConn) {
-	//// 如果是密码认证
-	//if Config.Method == PwdMethod {
-	//	// 获取该用户信息
-	//	_,ok := AuthenticationUser[conn.RemoteAddr().String()]
-	//	// 不存在
-	//	if !ok{
-	//		// 进行预处理（握手等）
-	//		HandlerPre(conn)
-	//	}
-	//}else {
-	//	// 如果是无需验证
-	//	HandlerPre(conn)
-	//}
-
+	defer conn.Close()
 	err := HandlerPre(conn)
 	if err != nil {
-		log.Println(err)
-		defer conn.Close()
+		log.Println("握手失败：",err)
 		return
 	}
 	err = HandlerConnect(conn)
 	if err != nil {
 		log.Println(err)
-		defer conn.Close()
-		return
 	}
 
-for{
-	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
-	buf := make([]byte,4096)
-	n,err := conn.Read(buf)
-	if err != nil {
-		fmt.Println(err)
-		defer func() {
-			conn.Close()
-			delete(userTargetMap,conn.RemoteAddr().String())
-		}()
-		return
-	}
-	fmt.Println(n)
-	fmt.Printf(string(n))
 }
-
-}
-
-
 
 /*预先处理，包括 握手，认证等*/
 func HandlerPre(conn *net.TCPConn) (err error) {
@@ -103,16 +65,11 @@ func HandlerPre(conn *net.TCPConn) (err error) {
 	/**
 		处理密码验证
 	*/
-	if Config.Method == PwdMethod{
-		var user User
-		user,err = handlerPwdAuthentication(conn)
+	if Config.Method == PwdMethod {
+		err = handlerPwdAuthentication(conn)
 		if err != nil {
 			return
 		}
-		/**
-			增加用户到map
-		*/
-		addUser(user)
 	}
 
 	return
@@ -121,11 +78,11 @@ func HandlerPre(conn *net.TCPConn) (err error) {
 /*处理握手*/
 func handlerHandshake(conn *net.TCPConn) error {
 	// 读取客户端握手请求对象,生成响应对象
-	handshakeResponse,err := readHandshakeRequestGenerateResponse(conn)
+	handshakeResponse, err := readHandshakeRequestGenerateResponse(conn)
 	// 响应不为空，则表示认证不支持或成功，发送响应
 	if handshakeResponse != nil {
 		// 发送响应
-		err = sendResponse(conn,handshakeResponse)
+		err = sendResponse(conn, handshakeResponse)
 		if err != nil {
 			return err
 		}
@@ -138,45 +95,43 @@ func handlerHandshake(conn *net.TCPConn) error {
 }
 
 /*处理密码认证*/
-func handlerPwdAuthentication(conn *net.TCPConn) (user User,err error){
+func handlerPwdAuthentication(conn *net.TCPConn) ( err error) {
 	// 读取
 	var request *PwdAuthenticationRequest
-	request,err = readPwdAuthenticationRequest(conn)
+	request, err = readPwdAuthenticationRequest(conn)
 	if err != nil {
 		return
 	}
 	// 读取成功才对客户端进行响应
-	response := PwdAuthenticationResponse{One,Zero}
+	response := PwdAuthenticationResponse{One, Zero}
 
 	/**
 		校验密码
 	 */
-	 if Config.Username != string(request.Username) || Config.Password != string(request.Password) {
-	 	// 失败响应
-	 	response.Result = One
-	 	sendResponse(conn,response)
-	 	err = errors.New("用户密码错误")
-	 	return
-	 }
+	if Config.Username != string(request.Username) || Config.Password != string(request.Password) {
+		// 失败响应
+		response.Result = One
+		sendResponse(conn, response)
+		err = errors.New("用户密码错误")
+		return
+	}
 
-	 // 成功响应
-	 err = sendResponse(conn,response)
-	 if err != nil {
-	 	return
-	 }
-
-	 user = User{conn.RemoteAddr().String()}
-	 return
+	// 成功响应
+	err = sendResponse(conn, response)
+	if err != nil {
+		return
+	}
+	return
 }
 
 /*读取客户端握手请求对象,生成响应对象*/
-func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *HandshakeResponse,err error){
+func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *HandshakeResponse, err error) {
 	// 设置读取超时时间
 	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
 
 	// 读取为对象
 	request := new(HandshakeRequest)
-	err = binary.Read(conn,binary.LittleEndian,request)
+	err = binary.Read(conn, binary.LittleEndian, request)
 	if err != nil {
 		return
 	}
@@ -192,10 +147,10 @@ func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *Handshak
 	}
 
 	// 响应对象
-	response = &HandshakeResponse{Version,Config.Method}
+	response = &HandshakeResponse{Version, Config.Method}
 
 	// methods字段
-	if request.Methods != Config.Method{
+	if request.Methods != Config.Method {
 		response.Method = NotSupport
 		err = errors.New("不支持客户端的认证方式")
 		return
@@ -203,15 +158,13 @@ func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *Handshak
 	return
 }
 
-
-
 /*读取密码认证请求对象*/
-func readPwdAuthenticationRequest(conn *net.TCPConn) (result *PwdAuthenticationRequest,err error){
+func readPwdAuthenticationRequest(conn *net.TCPConn) (result *PwdAuthenticationRequest, err error) {
 	// 设置超时时间
 	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
 	// 读取字节
 	var buf []byte
-	buf,err = readMessage(conn,512)
+	buf, err = readMessage(conn, 512)
 	if err != nil {
 		return
 	}
@@ -222,63 +175,61 @@ func readPwdAuthenticationRequest(conn *net.TCPConn) (result *PwdAuthenticationR
 	// 转换为读取器
 	reader := bytes.NewReader(buf)
 	// 读取无意义标识
-	result.Pointless,err = reader.ReadByte()
+	result.Pointless, err = reader.ReadByte()
 	if err != nil {
 		return
 	}
 	// 读取用户名
-	result.UsernameLength,result.Username,err = readByLenField(reader)
+	result.UsernameLength, result.Username, err = readByLenField(reader)
 	if err != nil {
 		return
 	}
 	// 读取密码
-	result.PasswordLength,result.Password,err = readByLenField(reader)
+	result.PasswordLength, result.Password, err = readByLenField(reader)
 	if err != nil {
 		return
 	}
 	return
 }
 
-
-
 /*处理连接请求*/
 func HandlerConnect(conn *net.TCPConn) (error) {
 	// 构造一个默认的失败响应
 	response := ConnectResponse{
-		Version:Version,
-		Response:One,
-		Reserve:Zero,
-		AddressType:Ipv4,
-		Address: []byte{0,0,0,0},
-		Port:0,
+		Version:     Version,
+		Response:    One,
+		Reserve:     Zero,
+		AddressType: Ipv4,
+		Address:     []byte{0, 0, 0, 0},
+		Port:        0,
 	}
 
 	// 读取请求
-	request,err  := readConnectRequest(conn)
+	request, err := readConnectRequest(conn)
 	if err != nil {
-		sendResponse(conn,response)
+		sendResponse(conn, response)
 		return err
 	}
 
 	// 连接到目标服务器
-	targetConn,err := connectToTarget(request.Target)
+	targetConn, err := connectToTarget(request.Target)
 	if err != nil {
-		sendResponse(conn,response)
+		sendResponse(conn, response)
 		return err
 	}
+	defer targetConn.Close()
 
 	// 连接成功
 	response.Response = Zero
-	response.Address,response.Port = Ip2Bytes(targetConn.LocalAddr().String())
-
-	//err = sendResponse(conn,response)
-	buf := response.ToBytes()
-	_,err = conn.Write(buf)
+	response.Address, response.Port = Ip2Bytes(targetConn.LocalAddr().String())
+	// 发送响应
+	err = sendResponse(conn, response)
 	if err != nil {
 		return nil
 	}
-	// 暂存这个连接
-	addTargetConn(conn.RemoteAddr().String(),targetConn)
+
+	go io.Copy(targetConn, conn)
+	io.Copy(conn, targetConn)
 
 	return nil
 }
@@ -286,7 +237,7 @@ func HandlerConnect(conn *net.TCPConn) (error) {
 /*连接到目标服务器*/
 func connectToTarget(target string) (conn *net.TCPConn, err error) {
 	var dial net.Conn
-	dial,err = net.DialTimeout("tcp",target,ReadTimeout)
+	dial, err = net.DialTimeout("tcp", target, ReadTimeout)
 	if err != nil {
 		return
 	}
@@ -295,12 +246,12 @@ func connectToTarget(target string) (conn *net.TCPConn, err error) {
 }
 
 /*读取连接请求*/
-func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest,err error) {
+func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest, err error) {
 	// 设置超时时间
 	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
 	// 读取字节
 	var buf []byte
-	buf,err = readMessage(conn,512)
+	buf, err = readMessage(conn, 512)
 	if err != nil {
 		return
 	}
@@ -311,22 +262,22 @@ func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest,err error) {
 	request = new(ConnectRequest)
 
 	// 读取版本
-	request.Version,err = reader.ReadByte()
+	request.Version, err = reader.ReadByte()
 	if err != nil {
 		return
 	}
 	// 读取命令
-	request.CMD,err = reader.ReadByte()
+	request.CMD, err = reader.ReadByte()
 	if err != nil {
 		return
 	}
 	// 保留字段
-	request.Reserve,err = reader.ReadByte()
+	request.Reserve, err = reader.ReadByte()
 	if err != nil {
 		return
 	}
 	// 地址类型
-	request.AddressType,err = reader.ReadByte()
+	request.AddressType, err = reader.ReadByte()
 	if err != nil {
 		return
 	}
@@ -336,7 +287,7 @@ func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest,err error) {
 	switch request.AddressType {
 	// ipv4,4个字节
 	case Ipv4:
-		request.AddressBytes,n,err = readMessageByReader(reader,4)
+		request.AddressBytes, n, err = readMessageByReader(reader, 4)
 		if err != nil {
 			return
 		}
@@ -344,15 +295,15 @@ func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest,err error) {
 			err = errors.New("长度不正确")
 			return
 		}
-	// 域名，下个字节表示域名长度
+		// 域名，下个字节表示域名长度
 	case DomainName:
-		_,request.AddressBytes,err  = readByLenField(reader)
+		_, request.AddressBytes, err = readByLenField(reader)
 		if err != nil {
 			return
 		}
-	// ipv6
+		// ipv6
 	case Ipv6:
-		request.AddressBytes,n,err = readMessageByReader(reader,16)
+		request.AddressBytes, n, err = readMessageByReader(reader, 16)
 		if err != nil {
 			return
 		}
@@ -366,7 +317,7 @@ func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest,err error) {
 
 	// 读取端口
 	var portBytes []byte
-	portBytes,n,err = readMessageByReader(reader,2)
+	portBytes, n, err = readMessageByReader(reader, 2)
 	if err != nil {
 		return
 	}
@@ -374,30 +325,17 @@ func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest,err error) {
 		err = errors.New("长度不正确")
 		return
 	}
-	binary.BigEndian.PutUint16(portBytes,request.Port)
+	binary.Read(bytes.NewReader(portBytes),binary.BigEndian,&request.Port)
 
 	// 将目标地址[]byte转string
 	if request.AddressType == DomainName {
 		request.Address = string(request.AddressBytes)
-	}else {
+	} else {
 		request.Address = Bytes2Ip(request.AddressBytes)
 	}
 
 	// 拼接完成目标地址
-	if request.Port != 0 {
-		request.Target = request.Address + ":" + strconv.Itoa(int(request.Port))
-	}else if request.AddressType == DomainName{
-		// 如果是域名的形式，并且端口为0，自动加上80端口
-		request.Target = request.Address + ":80"
-	}else{
-		request.Target = request.Address
-	}
-
+	request.Target =  net.JoinHostPort(request.Address,strconv.Itoa(int(request.Port)))
 
 	return
 }
-
-
-
-
-

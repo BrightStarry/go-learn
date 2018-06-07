@@ -56,7 +56,7 @@ func main() {
 			ch1 <- <- ch2 // ch1 等待 ch2流出的数据
 		}
 
-		func main() {
+		func jump() {
 			go say("hello")
 			<- ch1  // 堵塞主线
 		}
