@@ -35,7 +35,7 @@ func main() {
 	//if err != nil {
 	//	panic(errors.New("当前路径获取失败:" + err.Error()))
 	//}
-	//log.Println("当前路径:",rootPath)
+	//log-monitor.Println("当前路径:",rootPath)
 
 	log.Println("服务已启动")
 	err := server.ListenAndServe()

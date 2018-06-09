@@ -33,7 +33,7 @@ func main() {
 	//// 读取消息到buf
 	//n,err = conn.Read(buf)
 	//if err != nil && err != io.EOF {//io.EOF在网络编程中表示对端把链接关闭了。
-	//	log.Fatalln("读取http报文发生异常:",err)
+	//	log-monitor.Fatalln("读取http报文发生异常:",err)
 	//}
 	//println("读取的数据大小是",n)
 

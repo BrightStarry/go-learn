@@ -63,7 +63,7 @@ func handlerClientRequest(client net.Conn) {
 
 	// 此处需要追加判断，因为可能请求报文第一行长度超过1024字节，则无法找到 '\r' ，则会下标越界
 	//test1 := string(buf[:])
-	//log.Println("测试数据:",test1)
+	//log-monitor.Println("测试数据:",test1)
 
 	i := bytes.IndexByte(buf[:],'\r')
 	if i== -1{
