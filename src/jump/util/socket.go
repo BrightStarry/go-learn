@@ -103,7 +103,7 @@ func handlerPwdAuthentication(conn *net.TCPConn) ( err error) {
 		return
 	}
 	// 读取成功才对客户端进行响应
-	response := PwdAuthenticationResponse{One, Zero}
+	response := &PwdAuthenticationResponse{One, Zero}
 
 	/**
 		校验密码
@@ -130,7 +130,7 @@ func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *Handshak
 	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
 
 	// 读取为对象
-	request := new(HandshakeRequest)
+	request := *new(HandshakeRequest)
 	err = binary.Read(conn, binary.LittleEndian, request)
 	if err != nil {
 		return

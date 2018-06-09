@@ -65,8 +65,8 @@ func (this Configuration) String() string {
 }
 
 /*构造默认的系统配置*/
-func NewDefaultConfig() Configuration {
-	return Configuration{
+func NewDefaultConfig() *Configuration {
+	return &Configuration{
 		Username:"zx",
 		Password:"123456",
 		Port:"8081",
