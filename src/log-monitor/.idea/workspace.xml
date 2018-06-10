@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="BookmarkManager">
+    <bookmark url="file://$PROJECT_DIR$/log-process.go" line="62" mnemonic="1" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="1146d034-5013-4b46-9f85-739ca66b0f63" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -10,21 +13,15 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="375">
       <file leaf-file-name="log-process.go" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/log-process.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="529">
-              <caret line="183" column="18" selection-start-line="183" selection-start-column="18" selection-end-line="183" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="panic.go" pinned="false" current-in-tab="false">
-        <entry file="file://C:/Go/src/runtime/panic.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="132">
-              <caret line="587" selection-start-line="587" selection-end-line="587" />
+            <state relative-caret-position="-6">
+              <caret line="303" column="29" selection-start-line="303" selection-start-column="29" selection-end-line="303" selection-end-column="29" />
+              <folding>
+                <element signature="e#14#99#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -32,38 +29,8 @@
       <file leaf-file-name="mock_data_test.go" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mock_data_test.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="302">
-              <caret line="15" selection-start-line="15" selection-end-line="15" />
-              <folding>
-                <element signature="e#14#41#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="types.go" pinned="false" current-in-tab="false">
-        <entry file="file://C:/Go/src/os/types.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="236">
-              <caret line="60" column="52" lean-forward="true" selection-start-line="60" selection-start-column="32" selection-end-line="60" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="file.go" pinned="false" current-in-tab="false">
-        <entry file="file://C:/Go/src/os/file.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="245" column="60" lean-forward="true" selection-start-line="245" selection-start-column="49" selection-end-line="245" selection-end-column="60" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="access.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/access.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="25">
-              <caret line="87" selection-start-line="87" selection-end-line="88" />
+            <state relative-caret-position="300">
+              <caret line="33" column="22" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -88,6 +55,7 @@
       <list>
         <option value="$PROJECT_DIR$/mock_data.go" />
         <option value="$PROJECT_DIR$/access.log" />
+        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/mock_data_test.go" />
         <option value="$PROJECT_DIR$/log-process.go" />
       </list>
@@ -148,7 +116,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -183,6 +150,36 @@
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
               <item name="Go SDK 1.10.3" type="20ee2d1f:SyntheticLibraryElementNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="encoding" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Go SDK 1.10.3" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="encoding" type="462c0819:PsiDirectoryNode" />
+              <item name="json" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Go SDK 1.10.3" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="math" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Go SDK 1.10.3" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="math" type="462c0819:PsiDirectoryNode" />
+              <item name="rand" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Go SDK 1.10.3" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="os" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -199,10 +196,67 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="runtime" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="GOPATH &lt;log-monitor&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="GOPATH &lt;log-monitor&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="GOPATH &lt;log-monitor&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="github.com" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="GOPATH &lt;log-monitor&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="github.com" type="462c0819:PsiDirectoryNode" />
+              <item name="influxdata" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="GOPATH &lt;log-monitor&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="github.com" type="462c0819:PsiDirectoryNode" />
+              <item name="influxdata" type="462c0819:PsiDirectoryNode" />
+              <item name="influxdb" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="GOPATH &lt;log-monitor&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="github.com" type="462c0819:PsiDirectoryNode" />
+              <item name="influxdata" type="462c0819:PsiDirectoryNode" />
+              <item name="influxdb" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="log-monitor" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="GOPATH &lt;log-monitor&gt;" type="20ee2d1f:SyntheticLibraryElementNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="github.com" type="462c0819:PsiDirectoryNode" />
+              <item name="influxdata" type="462c0819:PsiDirectoryNode" />
+              <item name="influxdb" type="462c0819:PsiDirectoryNode" />
+              <item name="client" type="462c0819:PsiDirectoryNode" />
+              <item name="v2" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -234,7 +288,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Test.TestMockData in log-monitor">
+  <component name="RunManager" selected="Go Build.go build log-process.go">
     <configuration name="go build log-process.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="log-monitor" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -243,6 +297,17 @@
       <filePath value="$PROJECT_DIR$/log-process.go" />
       <package value="log-monitor" />
       <directory value="$PROJECT_DIR$/" />
+    </configuration>
+    <configuration name="TestBufChannel in log-monitor" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
+      <module name="log-monitor" />
+      <working_directory value="$PROJECT_DIR$" />
+      <go_parameters value="-i" />
+      <framework value="gotest" />
+      <kind value="PACKAGE" />
+      <package value="log-monitor" />
+      <directory value="$PROJECT_DIR$/" />
+      <filePath value="$PROJECT_DIR$/" />
+      <pattern value="^TestBufChannel$" />
     </configuration>
     <configuration name="TestMockData in log-monitor" type="GoTestRunConfiguration" factoryName="Go Test" temporary="true" nameIsGenerated="true">
       <module name="log-monitor" />
@@ -338,64 +403,66 @@
     <list>
       <item itemvalue="Go Build.go build log-process.go" />
       <item itemvalue="Go Test.TestMockData in log-monitor" />
+      <item itemvalue="Go Test.TestBufChannel in log-monitor" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Go Test.TestMockData in log-monitor" />
         <item itemvalue="Go Build.go build log-process.go" />
+        <item itemvalue="Go Test.TestBufChannel in log-monitor" />
       </list>
     </recent_temporary>
   </component>
   <component name="TestHistory">
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 12m 30s.xml">
+    <history-entry file="TestBufChannel_in_log-monitor - 2018.06.10 at 14h 49m 35s.xml">
+      <configuration name="TestBufChannel in log-monitor" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestBufChannel_in_log-monitor - 2018.06.10 at 14h 49m 39s.xml">
+      <configuration name="TestBufChannel in log-monitor" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestBufChannel_in_log-monitor - 2018.06.10 at 14h 49m 54s.xml">
+      <configuration name="TestBufChannel in log-monitor" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestBufChannel_in_log-monitor - 2018.06.10 at 14h 49m 57s.xml">
+      <configuration name="TestBufChannel in log-monitor" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestBufChannel_in_log-monitor - 2018.06.10 at 14h 50m 16s.xml">
+      <configuration name="TestBufChannel in log-monitor" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestBufChannel_in_log-monitor - 2018.06.10 at 14h 50m 23s.xml">
+      <configuration name="TestBufChannel in log-monitor" configurationId="GoTestRunConfiguration" />
+    </history-entry>
+    <history-entry file="TestMockData_in_log-monitor - 2018.06.10 at 14h 51m 08s.xml">
       <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 12m 45s.xml">
+    <history-entry file="TestMockData_in_log-monitor - 2018.06.10 at 14h 54m 40s.xml">
       <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 15m 18s.xml">
-      <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
+    <history-entry file="TestBufChannel_in_log-monitor - 2018.06.10 at 14h 54m 59s.xml">
+      <configuration name="TestBufChannel in log-monitor" configurationId="GoTestRunConfiguration" />
     </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 15m 38s.xml">
-      <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 17m 00s.xml">
-      <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 17m 21s.xml">
-      <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 17m 42s.xml">
-      <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 17m 49s.xml">
-      <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 17m 55s.xml">
-      <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
-    </history-entry>
-    <history-entry file="TestMockData_in_log-monitor - 2018.06.09 at 22h 18m 00s.xml">
+    <history-entry file="TestMockData_in_log-monitor - 2018.06.10 at 14h 56m 03s.xml">
       <configuration name="TestMockData in log-monitor" configurationId="GoTestRunConfiguration" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2639485" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19152361" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" sideWeight="0.50214595" side_tool="true" weight="0.37557605" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5026824" side_tool="true" weight="0.5057604" />
+      <window_info anchor="right" id="Database" order="3" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32949308" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4967811" weight="0.32949308" />
-      <window_info anchor="bottom" id="Version Control" show_stripe_button="false" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Terminal" sideWeight="0.49731758" weight="0.32949308" />
-      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49785408" weight="0.5057604" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="Terminal" order="7" sideWeight="0.49731758" weight="0.32949308" />
+      <window_info id="Favorites" order="2" side_tool="true" />
+      <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.49731758" weight="0.5057604" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -409,15 +476,52 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="14" />
+      <option name="time" value="25" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
+    <entry file="file://$PROJECT_DIR$/log-process.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4325">
+          <caret line="183" column="18" selection-start-line="183" selection-start-column="18" selection-end-line="183" selection-end-column="18" />
+          <folding>
+            <element signature="e#14#99#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/runtime/panic.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14575">
+          <caret line="587" selection-start-line="587" selection-end-line="587" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mock_data_test.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/os/types.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1425">
+          <caret line="60" column="52" lean-forward="true" selection-start-line="60" selection-start-column="32" selection-end-line="60" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/os/file.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="5950">
+          <caret line="245" column="60" lean-forward="true" selection-start-line="245" selection-start-column="49" selection-end-line="245" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/access.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2175">
+          <caret line="87" selection-start-line="87" selection-end-line="88" />
         </state>
       </provider>
     </entry>
@@ -472,8 +576,22 @@
     </entry>
     <entry file="file://C:/Go/src/os/file.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
+        <state relative-caret-position="5950">
           <caret line="245" column="60" lean-forward="true" selection-start-line="245" selection-start-column="49" selection-end-line="245" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/runtime/panic.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14575">
+          <caret line="587" selection-start-line="587" selection-end-line="587" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/math/rand/rand.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="327" column="64" selection-start-line="327" selection-start-column="64" selection-end-line="327" selection-end-column="64" />
         </state>
       </provider>
     </entry>
@@ -484,34 +602,52 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../github.com/influxdata/influxdb/client/v2/client.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="219" column="5" selection-start-line="219" selection-start-column="5" selection-end-line="219" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="268">
+            <caret line="11" column="9" selection-start-line="11" selection-start-column="9" selection-end-line="11" selection-end-column="9" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://C:/Go/src/encoding/json/encode.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="183">
+          <caret line="170" column="5" selection-start-line="170" selection-start-column="5" selection-end-line="170" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/mock_data_test.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="302">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-          <folding>
-            <element signature="e#14#41#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="300">
+          <caret line="33" column="22" selection-start-line="33" selection-start-column="16" selection-end-line="33" selection-end-column="22" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/access.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="25">
-          <caret line="87" selection-start-line="87" selection-end-line="88" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://C:/Go/src/runtime/panic.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="587" selection-start-line="587" selection-end-line="587" />
+      <provider selected="true" editor-type-id="text-editor" />
+      <provider editor-type-id="LargeFileEditor">
+        <state relative-caret-position="-475">
+          <caret line="2" column="32" lean-forward="true" selection-end-line="4756" selection-end-column="214" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/log-process.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="183" column="18" selection-start-line="183" selection-start-column="18" selection-end-line="183" selection-end-column="18" />
+        <state relative-caret-position="-6">
+          <caret line="303" column="29" selection-start-line="303" selection-start-column="29" selection-end-line="303" selection-end-column="29" />
+          <folding>
+            <element signature="e#14#99#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

@@ -5,6 +5,7 @@ import (
 	"os"
 	"bufio"
 	"fmt"
+	"time"
 )
 
 /*模拟数据*/
@@ -30,7 +31,7 @@ func TestMockData(t  *testing.T) {
 	defer file2.Close()
 	writer := bufio.NewWriter(file2)
 
-	for i:=0;i<=100;i++{
+	for i:=0;i<=100000;i++{
 		line,_  := reader.ReadBytes('\n')
 		n,err := writer.Write(line)
 		if err != nil {
@@ -41,6 +42,14 @@ func TestMockData(t  *testing.T) {
 
 	}
 	writer.Flush()
+}
 
-
+func TestBufChannel(t *testing.T) {
+	c := make(chan string,10)
+	go func() {
+		for v:= range c{
+			fmt.Println(v)
+		}
+	}()
+	time.Sleep(time.Hour)
 }
