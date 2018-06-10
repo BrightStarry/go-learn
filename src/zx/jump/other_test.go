@@ -1,9 +1,8 @@
-package test
+package jump
 
 import (
 	"testing"
 	"net"
-	"jump/util"
 	"fmt"
 	"log"
 )
@@ -12,10 +11,10 @@ import (
 
 func TestIp(t *testing.T) {
 	conn,_ := net.Dial("tcp","106.14.7.29:80")
-	ip,port := util.Ip2Bytes(conn.LocalAddr().String())
+	ip,port := Ip2Bytes(conn.LocalAddr().String())
 	fmt.Println(ip,"    ",port)
 
 	data := [4]byte{12,12,12,12}
 	s := net.IPv4(data[0],data[1],data[2],data[3]).String()
-	DebugLog.Println(s)
+	log.Println(s)
 }

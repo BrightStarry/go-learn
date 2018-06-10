@@ -1,10 +1,10 @@
 package main
 
 import (
-	"jump/util"
 	"flag"
 	"errors"
 	"log"
+	"zx/jump/util"
 )
 
 
