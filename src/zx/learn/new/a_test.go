@@ -4,6 +4,7 @@ import (
 	"testing"
 	"fmt"
 	"unicode/utf8"
+	"golang.org/x/tools/container/intsets"
 )
 
 func TestRune(T *testing.T) {

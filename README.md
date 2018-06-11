@@ -22,6 +22,7 @@
     - 如果分片长度递增,那么每次长度等于容量,进行扩容时,会按照2的幂等进行扩容,即 2,4,6,8,16,32
     - 如果想要删除分片中的某个元素,则 s = append(s[:3],s[4:]),则删除了分片s的下标为3的元素
 - rune类型相当于char    
+- 每个包下,若干go文件,只能有一个main方法
 #### 跨平台编译
 ~~~
 在根目录执行
@@ -55,3 +56,9 @@ go install bt/main
 
 #### 奇淫巧技
 - goland快捷键： C+A+v ,快速生成方法返回对象
+
+#### 导包
+- go get github.com/gpmgo/gopm
+- go install github.com/gpmgo/gopm
+- 导入并安装该工具,可以get google被墙的一些包
+- 例如导入: gopm get -g -v golang.org/x/tools/cmd/goimports
