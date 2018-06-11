@@ -88,3 +88,10 @@ func TestA(T *testing.T) {
 
 	fmt.Println(maxLength)
 }
+
+func TestB(t *testing.T) {
+	fmt.Println("1")
+	panic("...")
+	// 答案是不会执行
+	defer fmt.Println("如果没有运行到defer，直接出错，是否会执行defer语句")
+}
