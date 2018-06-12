@@ -1,4 +1,4 @@
-package jump
+package test
 
 import (
 	"testing"

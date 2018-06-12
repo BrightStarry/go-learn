@@ -130,7 +130,7 @@ func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *Handshak
 	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
 
 	// 读取为对象
-	request := *new(HandshakeRequest)
+	request := new(HandshakeRequest)
 	err = binary.Read(conn, binary.LittleEndian, request)
 	if err != nil {
 		return
