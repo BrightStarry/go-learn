@@ -40,6 +40,26 @@ func generateRandomArray(size , rangeL , rangeR int) []int{
 }
 
 /**
+	生成近乎有序的随机数
+ */
+ func generateNearlyOrderedArray(size,swapTimes int) []int{
+ 	// 先生成一个完全有序的数组, go中,使用make构建的分片,元素会被附上默认值,int,也就是全为0的分片
+ 	arr := make([]int,size,size)
+ 	for i:=range arr{
+ 		arr[i] = i
+	}
+	 // 随机数种子
+	 rand.Seed(time.Now().Unix())
+ 	// 然后随机选取元素进行交换,进行swapTimes次
+ 	for i:=0;i< swapTimes; i++{
+		posX :=rand.Intn(size)
+		posY := rand.Intn(size)
+		arr[posX],arr[posY] = arr[posY],arr[posX]
+	}
+	return arr
+ }
+
+/**
 	测试算法性能
  */
 func testSort(sortName string, arr []int,size int,sort func([]int, int) []int) {
