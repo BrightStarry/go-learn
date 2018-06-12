@@ -4,9 +4,16 @@ import (
 	"testing"
 	"fmt"
 	"unicode/utf8"
-	"golang.org/x/tools/container/intsets"
 )
 
+/**
+
+ */
+
+
+ /**
+ 	字节转rune
+  */
 func TestRune(T *testing.T) {
 	s := "a人间正道是沧桑"
 
