@@ -25,6 +25,30 @@ func TestA(t *testing.T) {
 	testSort("希尔排序",arr4,size,shellSort)
 }
 
+/**
+	性能测试
+	会执行若干次,显示平均执行时间
+	默认会执行1秒左右的测试
+ */
+func BenchmarkTest(b *testing.B) {
+	// 多显示几个参数
+	b.ReportAllocs()
+	// ...假设进行若干操作
+	// 重置时间统计
+	b.ResetTimer()
+	for i := 0; i < b.N; i++{
+		size := 1 * 10000
+		arr1 := generateRandomArray(size, 0, size)
+		arr2 := copyIntArray(arr1,size)
+		arr3 := copyIntArray(arr1,size)
+		arr4 := copyIntArray(arr1,size)
+		testSort("选择排序", arr1, size, selectSort)
+		testSort("插入排序",arr2,size,insertSort)
+		testSort("冒泡排序",arr3,size,bubbleSort)
+		testSort("希尔排序",arr4,size,shellSort)
+	}
+}
+
 /*
 	生成随机数组
 	长度为size,范围为[rangeL,rangeR]

@@ -11,6 +11,11 @@
 - testList := make([]interface{},3) 和 testList := []string{"1"},前者是[]interface{}类型，但后者不是
 - 用io.Open方式打开文件,写入数据时会报 拒绝访问异常. 需要用 os.OpenFile
 
+#### 协程
+- 协程和线程的主要区别可以理解为协程是非抢占式线程,例如在io操作时,都会主动让住控制权.  
+    但如果main函数开启一个协程,在协程中不停的做累加这种无法停止的操作,整个程序就会陷入死循环,
+    main也无法退出(阻塞在time.Sleep(xx)处),可以执行 runtime.Gosched(),主动交出控制权
+
 
 #### 要点
 - 有些方法接收的参数是指针，则表示该方法中，可以改变该参数的引用的值。否则是值传递。
@@ -23,6 +28,9 @@
     - 如果想要删除分片中的某个元素,则 s = append(s[:3],s[4:]),则删除了分片s的下标为3的元素
 - rune类型相当于char    
 - 每个包下,若干go文件,只能有一个main方法
+- 执行godoc -http :6060,可在本地起一个服务器,查看所有本地go代码的文档 .
+    如果在某个代码文件的测试代码中,用Examplexx开头的方法写一些代码,可以在文档中显示为example.
+- 执行go run -race xxx.go可以运行go文件,并检测访问冲突 bug
 #### 跨平台编译
 ~~~
 在根目录执行
@@ -62,3 +70,13 @@ go install bt/main
 - go install github.com/gpmgo/gopm
 - 导入并安装该工具,可以get google被墙的一些包
 - 例如导入: gopm get -g -v golang.org/x/tools/cmd/goimports
+
+#### 性能测试
+- 将普通测试方法的参数*testing.T改为*testing.B
+- 用如下命令运行在该测试文件根目录运行,可生成cpu.out文件
+> go test -bench . -cpuprofile cpu.out
+- 运行如下命令,进入查看该文件的命令行
+> go tool pprof cpu.out 
+- 在命令行中输入help,可查看说明
+- 下载graphviz,解压并配置它的bin目录到PATH环境变量,然后输入web,即可打开一张图片
+- 图片中方框越大,线头越粗的地方,即是耗时越多的地方
