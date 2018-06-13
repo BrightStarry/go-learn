@@ -175,18 +175,16 @@ func readPwdAuthenticationRequest(conn *net.TCPConn) (result *PwdAuthenticationR
 	// 转换为读取器
 	reader := bytes.NewReader(buf)
 	// 读取无意义标识
-	result.Pointless, err = reader.ReadByte()
-	if err != nil {
+	if result.Pointless, err = reader.ReadByte();err != nil {
 		return
 	}
 	// 读取用户名
-	result.UsernameLength, result.Username, err = readByLenField(reader)
-	if err != nil {
+	if result.UsernameLength, result.Username, err = readByLenField(reader);err != nil {
 		return
 	}
+
 	// 读取密码
-	result.PasswordLength, result.Password, err = readByLenField(reader)
-	if err != nil {
+	if result.PasswordLength, result.Password, err = readByLenField(reader);err != nil {
 		return
 	}
 	return
@@ -223,9 +221,8 @@ func HandlerConnect(conn *net.TCPConn) (error) {
 	response.Response = Zero
 	response.Address, response.Port = Ip2Bytes(targetConn.LocalAddr().String())
 	// 发送响应
-	err = sendResponse(conn, response)
-	if err != nil {
-		return nil
+	if err = sendResponse(conn, response);err != nil {
+		return err
 	}
 
 	go io.Copy(targetConn, conn)
@@ -262,23 +259,22 @@ func readConnectRequest(conn *net.TCPConn) (request *ConnectRequest, err error) 
 	request = new(ConnectRequest)
 
 	// 读取版本
-	request.Version, err = reader.ReadByte()
-	if err != nil {
+
+	if request.Version, err = reader.ReadByte();err != nil {
 		return
 	}
 	// 读取命令
-	request.CMD, err = reader.ReadByte()
-	if err != nil {
+	if request.CMD, err = reader.ReadByte(); err != nil {
 		return
 	}
+
 	// 保留字段
-	request.Reserve, err = reader.ReadByte()
-	if err != nil {
+	if request.Reserve, err = reader.ReadByte(); err != nil {
 		return
 	}
+
 	// 地址类型
-	request.AddressType, err = reader.ReadByte()
-	if err != nil {
+	if request.AddressType, err = reader.ReadByte();err != nil {
 		return
 	}
 

@@ -14,11 +14,15 @@ import (
 	测试
  */
 func TestA(t *testing.T) {
-	size := 1 * 10000
+	size := 10 * 10000
 	arr1 := generateRandomArray(size, 0, size)
 	arr2 := copyIntArray(arr1,size)
-	testSort("选择排序1", arr1, len(arr1), selectSort)
-	testSort("插入排序",arr2,len(arr2),insertSort)
+	arr3 := copyIntArray(arr1,size)
+	arr4 := copyIntArray(arr1,size)
+	testSort("选择排序", arr1, size, selectSort)
+	testSort("插入排序",arr2,size,insertSort)
+	testSort("冒泡排序",arr3,size,bubbleSort)
+	testSort("希尔排序",arr4,size,shellSort)
 }
 
 /*
@@ -70,9 +74,11 @@ func testSort(sortName string, arr []int,size int,sort func([]int, int) []int) {
 	arr = sort(arr,size)
 	endTime := time.Now()
 	if !isSorted(arr,size) {
-		log.Println("该数组排序有误")
+		log.Println(sortName + "排序有误")
 	}
 	fmt.Println(sortName,",元素个数:",size,"执行时间:",endTime.Sub(startTime))
+	// 打印结果
+	//fmt.Println(sortName,arr)
 }
 
 /**
