@@ -16,7 +16,7 @@ import (
 func InitWebInfos() {
 	a := NewDefaultWebInfo("http://www.xicidaili.com/nn/", "西刺国内高匿", 0, 5*time.Minute)
 
-	*WebInfos = append(*WebInfos, *a)
+	WebInfos = append([]WebInfo{}, *a)
 }
 
 /**

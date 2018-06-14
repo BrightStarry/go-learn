@@ -11,7 +11,7 @@ import (
 	参数相关
  */
 // 保存所有网站信息
-var WebInfos  *[]WebInfo
+var WebInfos  []WebInfo
 // 系统配置
 var Config *SystemConfig
 // 默认请求头
@@ -22,7 +22,9 @@ var DefaultClient *http.Client
 /**
    初始化方法
 */
-func init() {
+func Init() {
+	// 初始化系统参数
+	InitSystemConfig()
 	// 初始化网站信息
 	InitWebInfos()
 	// 初始化client
