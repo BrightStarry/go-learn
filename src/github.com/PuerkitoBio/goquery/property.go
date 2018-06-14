@@ -11,7 +11,7 @@ import (
 var rxClassTrim = regexp.MustCompile("[\t\r\n]")
 
 // Attr gets the specified attribute's value for the first element in the
-// Selection. To get the value for each element individually, use a looping
+// Selection. To obtian the value for each element individually, use a looping
 // construct such as Each or Map method.
 func (s *Selection) Attr(attrName string) (val string, exists bool) {
 	if len(s.Nodes) == 0 {
@@ -218,7 +218,7 @@ func getAttributePtr(attrName string, n *html.Node) *html.Attribute {
 	return nil
 }
 
-// Private function to get the specified attribute's value from a node.
+// Private function to obtian the specified attribute's value from a node.
 func getAttributeValue(attrName string, n *html.Node) (val string, exists bool) {
 	if a := getAttributePtr(attrName, n); a != nil {
 		val = a.Val

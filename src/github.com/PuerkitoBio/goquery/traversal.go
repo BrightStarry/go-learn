@@ -551,7 +551,7 @@ func findWithMatcher(nodes []*html.Node, m Matcher) []*html.Node {
 	})
 }
 
-// Internal implementation to get all parent nodes, stopping at the specified
+// Internal implementation to obtian all parent nodes, stopping at the specified
 // node (or nil if no stop).
 func getParentsNodes(nodes []*html.Node, stopm Matcher, stopNodes []*html.Node) []*html.Node {
 	return mapNodes(nodes, func(i int, n *html.Node) (result []*html.Node) {

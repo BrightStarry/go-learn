@@ -4,11 +4,12 @@ import (
 	"testing"
 	"net/http"
 	"fmt"
-	"time"
 	"io/ioutil"
 	"strings"
 	"net/http/cookiejar"
 	"net/url"
+	"time"
+	"log"
 )
 
 /*
@@ -16,12 +17,40 @@ import (
 */
 
 func TestHttpClient(t *testing.T) {
-	u,_ := url.Parse("http://127.0.0.1")
+	u,_ := url.Parse("https://www.google.com")
 
-	// 构造请求客户端
+	ipProxy,err := url.Parse("http://127.0.0.1:8080")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	fmt.Println(ipProxy)
+
+	/**
+		设置http代理
+	 */
+	urlProxy,_ := url.Parse("http://127.0.0.1:8080")
+	//proxyClient := &http.Client{
+	//	Transport: &http.Transport{
+	//		Proxy:http.ProxyURL(urlProxy),
+	//	},
+	//}
+	fmt.Println(urlProxy)
+
+	/**
+		设置socks5代理
+	 */
+	 //dialer,_ := proxy.SOCKS5("tcp","207.148.25.48:8081",nil,proxy.Direct)
+	 //socks5Transport := &http.Transport{Dial:dialer.Dial}
+	 //client := &http.Client{
+		//Transport:socks5Transport ,
+	 //}
+
+
+	// 构造请求客户端(默客户端所有参数都为nil)
+	// 客户端线程安全，官方建议最好重用一个
 	client := &http.Client{}
 	// 设置超时时间
-	client.Timeout =  5 *  time.Second
+	client.Timeout =  10 *  time.Second
 
 
 	// 设置cookie,其中New()本应传入的参数是指cookie的作用域范围
@@ -33,10 +62,12 @@ func TestHttpClient(t *testing.T) {
 
 
 	// 构造请求
-	request,err := http.NewRequest(http.MethodPost,"http://127.0.0.1/a",strings.NewReader("name=aaa"))
+	request,err := http.NewRequest(http.MethodGet,"https://www.imooc.com/",strings.NewReader("name=aaa"))
 	if err != nil {
 		panic(err)
 	}
+
+
 
 	// 设置请求头
 	request.Header.Set("x","x")
@@ -73,6 +104,7 @@ func TestHttpClient(t *testing.T) {
 	//ele := doc.Find("body > div.note > div.post > div.article > div.show-content > div > h1:nth-child(16)")
 	//fmt.Println(ele.Text())
 
+	// 打印cookies
 	fmt.Println(client.Jar.Cookies(u))
 
 

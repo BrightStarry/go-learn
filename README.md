@@ -80,3 +80,9 @@ go install bt/main
 - 在命令行中输入help,可查看说明
 - 下载graphviz,解压并配置它的bin目录到PATH环境变量,然后输入web,即可打开一张图片
 - 图片中方框越大,线头越粗的地方,即是耗时越多的地方
+
+
+#### 比较好用的包
+- https://github.com/PuerkitoBio/goquery 类似java的jsoup，可用jquery或selector解析html（解析xml也很舒服）
+- https://github.com/parnurzeal/gorequest 封装了http client,没用过
+- https://github.com/sirupsen/logrus 日志
