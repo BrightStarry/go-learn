@@ -5,10 +5,9 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"io/ioutil"
 	"fmt"
 	"compress/gzip"
-	"io"
+	"github.com/PuerkitoBio/goquery"
 )
 
 /**
@@ -42,24 +41,24 @@ func (this *XiciAnonymity) InitObtain() *[]config.ProxyIp{
 	}
 	defer response.Body.Close()
 
-	var reader *io.ReadCloser
+	var doc *goquery.Document
 	if response.Header.Get("Content-Encoding") == "gzip" {
-		reader, err := gzip.NewReader(response.Body)
+		reader1, err := gzip.NewReader(response.Body)
 		if err != nil {
-			
+			log.Println(this.WebInfo.Name,"-解码:",u,"-异常:",err)
 		}
+		doc, err = goquery.NewDocumentFromReader(reader1)
 	} else {
-		reader = &response.Body
+		reader2 := &response.Body
+		doc, err = goquery.NewDocumentFromReader(*reader2)
 	}
-
-	//document, err := goquery.NewDocumentFromReader(response.Body)
-	//if err != nil {
-	//	log.Println(this.WebInfo.Name,"-读取响应异常:",err)
-	//}
-	//totalPageEle := document.Find("#body > div.pagination > a:nth-child(13)")
-	//fmt.Println(document.Html())
-	//log.Println(totalPageEle.Text())
-	b,_ :=ioutil.ReadAll(reader)
-	fmt.Println(string(b))
+	if err != nil {
+		log.Println(this.WebInfo.Name,"-读取响应异常:",err)
+	}
+	totalPageEle := doc.Find("#body > div.pagination > a:nth-child(13)")
+	fmt.Println(doc.Html())
+	log.Println(totalPageEle.Text())
+	//b,_ :=ioutil.ReadAll(reader)
+	//fmt.Println(string(b))
 	return nil
 }
