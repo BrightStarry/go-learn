@@ -28,7 +28,7 @@ func Init() {
 	// 初始化网站信息
 	InitWebInfos()
 	// 初始化client
-	InitDefaultClient()
+	DefaultClient = InitDefaultClient()
 }
 
 
@@ -52,7 +52,7 @@ func InitSystemConfig() {
 /**
 	初始化client
  */
-func InitDefaultClient() {
+func InitDefaultClient() *http.Client{
 	DefaultClient := &http.Client{}
 	// 超时时间
 	DefaultClient.Timeout =  Config.SpiderTimeout
@@ -73,4 +73,5 @@ func InitDefaultClient() {
 		"Upgrade-Insecure-Requests" : {"1"},
 		"Cache-Control" : {"max-age=0"},
 	}
+	return DefaultClient
 }
