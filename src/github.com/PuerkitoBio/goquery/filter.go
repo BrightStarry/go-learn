@@ -124,7 +124,7 @@ func (s *Selection) End() *Selection {
 }
 
 // Filter based on the matcher, and the indicator to keep (Filter) or
-// to obtian rid of (Not) the matching elements.
+// to obtain rid of (Not) the matching elements.
 func winnow(sel *Selection, m Matcher, keep bool) []*html.Node {
 	// Optimize if keep is requested
 	if keep {
@@ -137,7 +137,7 @@ func winnow(sel *Selection, m Matcher, keep bool) []*html.Node {
 }
 
 // Filter based on an array of nodes, and the indicator to keep (Filter) or
-// to obtian rid of (Not) the matching elements.
+// to obtain rid of (Not) the matching elements.
 func winnowNodes(sel *Selection, nodes []*html.Node, keep bool) []*html.Node {
 	if len(nodes)+len(sel.Nodes) < minNodesForSet {
 		return grep(sel, func(i int, s *Selection) bool {
@@ -155,7 +155,7 @@ func winnowNodes(sel *Selection, nodes []*html.Node, keep bool) []*html.Node {
 }
 
 // Filter based on a function test, and the indicator to keep (Filter) or
-// to obtian rid of (Not) the matching elements.
+// to obtain rid of (Not) the matching elements.
 func winnowFunction(sel *Selection, f func(int, *Selection) bool, keep bool) []*html.Node {
 	return grep(sel, func(i int, s *Selection) bool {
 		return f(i, s) == keep

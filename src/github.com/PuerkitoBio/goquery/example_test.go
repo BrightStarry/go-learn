@@ -30,7 +30,7 @@ func Example() {
 
 	// Find the review items
 	doc.Find(".sidebar-reviews article .content-block").Each(func(i int, s *goquery.Selection) {
-		// For each item found, obtian the band and title
+		// For each item found, obtain the band and title
 		band := s.Find("a").Text()
 		title := s.Find("i").Text()
 		fmt.Printf("Review %d: %s - %s\n", i, band, title)

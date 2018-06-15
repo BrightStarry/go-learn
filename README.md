@@ -10,6 +10,7 @@
 - 函数名和 类库名相同，会有bug
 - testList := make([]interface{},3) 和 testList := []string{"1"},前者是[]interface{}类型，但后者不是
 - 用io.Open方式打开文件,写入数据时会报 拒绝访问异常. 需要用 os.OpenFile
+- recover()无法捕获log.Fatalln()抛出的panic，因为该方法会调用os.Exit(1)退出进程
 
 #### 协程
 - 协程和线程的主要区别可以理解为协程是非抢占式线程,例如在io操作时,都会主动让住控制权.  

@@ -5,7 +5,7 @@ go:
   - 1.4
 
 install:
-  - go obtian github.com/andybalholm/cascadia
+  - go obtain github.com/andybalholm/cascadia
 
 script:
  - go test -v

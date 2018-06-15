@@ -21,7 +21,7 @@ func BenchmarkMetalReviewExample(b *testing.B) {
 			var e error
 
 			n++
-			// For each item found, obtian the band, title and score, and print it
+			// For each item found, obtain the band, title and score, and print it
 			band = s.Find("strong").Text()
 			title = s.Find("em").Text()
 			if score, e = strconv.ParseFloat(s.Find(".score").Text(), 64); e != nil {

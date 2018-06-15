@@ -548,7 +548,7 @@ func (s *Selection) manipulateNodes(ns []*html.Node, reverse bool,
 
 	lasti := s.Size() - 1
 
-	// net.Html doesn't provide document fragments for insertion, so to obtian
+	// net.Html doesn't provide document fragments for insertion, so to obtain
 	// things in the correct order with After() and Prepend(), the callback
 	// needs to be called on the reverse of the nodes.
 	if reverse {
