@@ -53,6 +53,12 @@ func TestHttpClient(t *testing.T) {
 	client.Timeout =  10 *  time.Second
 
 
+	// 自定义重定向方法,初始请求是req,每次重定向的请求保存到via分片中,只要返回的error==nil,就会自动重定向
+	client.CheckRedirect = func(req *http.Request, via []*http.Request) error {
+		return nil
+	}
+
+
 	// 设置cookie,其中New()本应传入的参数是指cookie的作用域范围
 	// 该cookie会自动保存网站写入的cookie
 	jar,_ := cookiejar.New(nil)
@@ -78,6 +84,9 @@ func TestHttpClient(t *testing.T) {
 		panic(err)
 	}
 	defer response.Body.Close()
+
+	// 如下语句可以直接获取整个响应的原始报文,true表示将body部分也输出.
+	//httputil.DumpResponse(response,true)
 
 	// 或者直接(实际上内部用一个默认的client，进行了NewRequest，Do等同上的操作)
 	//response,err := http.Get("https://www.jianshu.com/p/757d133021de")

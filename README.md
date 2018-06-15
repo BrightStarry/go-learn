@@ -32,6 +32,10 @@
 - 执行godoc -http :6060,可在本地起一个服务器,查看所有本地go代码的文档 .
     如果在某个代码文件的测试代码中,用Examplexx开头的方法写一些代码,可以在文档中显示为example.
 - 执行go run -race xxx.go可以运行go文件,并检测访问冲突 bug
+- 在某个go web的代码import中加入 _ "net/http/pprof" 可以导入该包,并且不使用它也不会报错.然后访问该web的 /debug/pprof路径,可以查看系统的一些参数.  
+    也可以执行 go tool pprof http://127.0.0.01:8080/debug/pprof/profile ,可以获取30s内的cpu使用率结果(在30s后的命令行中,
+    输入web(和下面go tool pprof cpu.out一样,会弹出图表))  
+    其他的可以查看该包源码,例如还可以查看heap情况
 #### 跨平台编译
 ~~~
 在根目录执行
