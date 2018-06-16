@@ -44,11 +44,12 @@ func Get(url string) (response *http.Response){
  */
 func GetByProxy(url string,proxy *url.URL)(response *http.Response) {
 	request := BuildGet(url)
-	client := http.Client{
-		Transport:&http.Transport{
-					Proxy:http.ProxyURL(proxy),
-				},
-	}
+	// 从池中获取
+	client := config.VerifierClientPool.Get().(*http.Client)
+	defer config.VerifierClientPool.Put(client)
+	// 设置代理
+	client.Transport.(*http.Transport).Proxy = http.ProxyURL(proxy)
+
 	response, err := client.Do(request)
 	if err != nil {
 		panic(errors.New("url:" + url + " 请求异常:"+err.Error()))

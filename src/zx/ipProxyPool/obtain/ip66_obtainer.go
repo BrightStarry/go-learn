@@ -18,16 +18,18 @@ type Ip66CommonObtainer struct {
 	*WebObtainer
 }
 
-func (this *Ip66CommonObtainer) IncrementObtain() {
+func (this *Ip66CommonObtainer) IncrementObtain() int {
 	//增量获取300
-	ip66Obtain(this.Url, 300)
+	return ip66Obtain(this.Url, 300)
 }
 
-func (this *Ip66CommonObtainer) InitObtain() {
-	// 初始化时，提取1001
-	ip66Obtain(this.Url, 1001)
+func (this *Ip66CommonObtainer) InitObtain() int {
+	// 初始化时
+	return ip66Obtain(this.Url, 501)
 }
-
+func (this *Ip66CommonObtainer) GetWebObtainer() *WebObtainer {
+	return this.WebObtainer
+}
 
 
 /**
@@ -37,45 +39,50 @@ type Ip66HttpsObtainer struct {
 	*WebObtainer
 }
 
-func (this *Ip66HttpsObtainer) IncrementObtain() {
+func (this *Ip66HttpsObtainer) IncrementObtain() int {
 	//增量获取200
-	ip66Obtain(this.Url, 200)
+	return ip66Obtain(this.Url, 200)
 }
 
-func (this *Ip66HttpsObtainer) InitObtain() {
+func (this *Ip66HttpsObtainer) InitObtain() int {
 	// 初始化时，提取1001
-	ip66Obtain(this.Url, 200)
+	return ip66Obtain(this.Url, 300)
+}
+
+func (this *Ip66HttpsObtainer) GetWebObtainer() *WebObtainer {
+	return this.WebObtainer
 }
 
 /**
 	通用提取方法
  */
-func ip66Obtain(url string, initSum int) {
+func ip66Obtain(url string, initSum int) int{
 	u := url + strconv.Itoa(initSum)
 	response := util.Get(u)
 	doc := util.ResponseToDocument(response)
 	bodyEle := doc.Find("body")
 	body, _ := bodyEle.Html()
 	arr := strings.Split(body, "<br/>\n\t\t")
-	proxyIps := make([]*config.ProxyIp, initSum-1)
+	//proxyIps := make([]*config.ProxyIp, initSum-1)
+	var proxyIps []*config.ProxyIp
 	//遍历,舍弃最后一个ip，因为还需要切割
 	for i := 0; i < len(arr)-1; i++ {
 		ip, port, err := net.SplitHostPort(arr[i])
 		if err != nil {
 			log.Println("url:", u, " 解析ioPort异常,当前值:", arr[i])
-			return
+			return 0
 		}
 		url, err := util.ParseToUrlOfHttp(ip, port)
 		if err != nil {
 			log.Println("url:", u, " 构造ipPort异常，当前值", arr[i])
-			return
+			return 0
 		}
 		proxyIps = append(proxyIps,&config.ProxyIp{
 			Url:  url,
-			//Protocol:config.HttpFlag,
 			Type: config.Normal,
 		})
 	}
-	util.AsyncProxyIpsToChan(config.ObtainerOutChan, proxyIps...)
+	util.AsyncProxyIpsToChan(config.WaitVerifyChan, proxyIps...)
+	return len(proxyIps)
 }
 

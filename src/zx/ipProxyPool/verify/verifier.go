@@ -5,15 +5,11 @@ import (
 	"github.com/pkg/errors"
 	"zx/ipProxyPool/util"
 	"time"
-	"log"
-	"fmt"
 )
 
 /**
 	校验器
  */
-const(
-)
 
 /**
 	校验网站
@@ -62,6 +58,9 @@ const(
 	level4
 )
 
+ /**
+ 	校验方法数组
+  */
  var verifyMethods = [...]func(*config.ProxyIp)error{
 	 verifyFormat,
 	 verifyHttp,
@@ -74,36 +73,62 @@ const(
  	启动检验器
   */
 func StartVerifier() {
-	for v:= range config.ObtainerOutChan{
-		fmt.Println(v)
-		go verify(v)
+	// 限制并发
+	for i := 0; i < config.Config.VerifierThreadNum; i++{
+		asyncVerify()
 	}
+}
+
+/**
+	异步校验
+ */
+func asyncVerify() {
+	go func() {
+		for v := range config.WaitVerifyChan {
+			d := Distinct(v)
+			if d {
+				Verify(v)
+			}
+
+		}
+	}()
+}
+
+/**
+	去重
+	return true:表示不存在, false:表示重复
+ */
+func Distinct(ip *config.ProxyIp) bool {
+	if _, ok := config.ProxyIpDistinctMap.Load(ip.Url.Host); ok{
+		return false
+	}
+	config.ProxyIpDistinctMap.Store(ip.Url.Host,nil)
+	return true
 }
 
 /**
 	校验
  */
-func verify(proxyIp *config.ProxyIp) {
-	log.Println("正在校验---")
+func Verify(proxyIp *config.ProxyIp) {
 	var l = level0
 	defer func() {
+		// 此处捕获异常,不做任何处理
 		if p := recover(); p != nil{
-			if l > level2 {
-				log.Println("校验成功---")
-				config.VerifiedChan <- proxyIp
-			}
+			//fmt.Println("校验异常:",p)
+		}
+		// 只要实现了http,就加入通道
+		if l >= level2 {
+			config.VerifiedChan <- proxyIp
 		}
 	}()
+	// 循环使用校验方法校验
 	for _,f := range  verifyMethods{
 		if err := f(proxyIp);err != nil {
-			break
+			return
 		}
 		l++
 	}
-	if l > level2 {
-		log.Println("校验成功---")
-		config.VerifiedChan <- proxyIp
-	}
+
 }
 
 /**

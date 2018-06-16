@@ -6,16 +6,18 @@ import (
 )
 
 // 保存所有网站信息
-var WebObtainers  = [10]Obtainer{}
+var WebObtainers  []Obtainer
 
 /**
    获取者接口
 */
 type Obtainer interface {
 	// 初始获取全部ip方法
-	InitObtain()
+	InitObtain() int
 	// 增量获取ip方法
-	IncrementObtain()
+	IncrementObtain() int
+	// 获取WebObtainer
+	GetWebObtainer() *WebObtainer
 }
 
 

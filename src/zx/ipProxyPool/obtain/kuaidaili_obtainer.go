@@ -17,12 +17,16 @@ type KuaidailiNnObtainer struct {
 	*WebObtainer
 }
 
-func (this *KuaidailiNnObtainer) IncrementObtain() {
-	kuaidailiOtain(this.Url,2)
+func (this *KuaidailiNnObtainer) IncrementObtain() int {
+	return kuaidailiOtain(this.Url,2)
 }
 
-func (this *KuaidailiNnObtainer) InitObtain() {
-	kuaidailiOtain(this.Url,10)
+func (this *KuaidailiNnObtainer) InitObtain() int {
+	return kuaidailiOtain(this.Url,10)
+}
+
+func (this *KuaidailiNnObtainer) GetWebObtainer() *WebObtainer {
+	return this.WebObtainer
 }
 
 /**
@@ -32,18 +36,23 @@ type KuaidailiCommonObtainer struct {
 	*WebObtainer
 }
 
-func (this *KuaidailiCommonObtainer) IncrementObtain() {
-	kuaidailiOtain(this.Url,2)
+func (this *KuaidailiCommonObtainer) IncrementObtain() int {
+	return kuaidailiOtain(this.Url,2)
 }
 
-func (this *KuaidailiCommonObtainer) InitObtain() {
-	kuaidailiOtain(this.Url,10)
+func (this *KuaidailiCommonObtainer) InitObtain() int {
+	return kuaidailiOtain(this.Url,10)
+}
+
+func (this *KuaidailiCommonObtainer) GetWebObtainer() *WebObtainer {
+	return this.WebObtainer
 }
 
 
 
-func kuaidailiOtain(url string,count int) {
-	proxyIps := make([]*config.ProxyIp,count * 14)
+func kuaidailiOtain(url string,count int) int{
+	//proxyIps := make([]*config.ProxyIp,count * 14)
+	var proxyIps []*config.ProxyIp
 	for i := 1; i <= count; i++ {
 		u := url + strconv.Itoa(i)
 		doc := util.GetOfDocument(u)
@@ -59,7 +68,6 @@ func kuaidailiOtain(url string,count int) {
 			}
 			proxyIp := &config.ProxyIp{
 				Url:      url,
-				//Protocol: config.HttpFlag,
 				Type:     config.Anonymity,
 			}
 			proxyIps = append(proxyIps,proxyIp)
@@ -67,6 +75,7 @@ func kuaidailiOtain(url string,count int) {
 		// 该网站短时间访问过于频繁会返回-10
 		time.Sleep(4 * time.Second)
 	}
-	util.AsyncProxyIpsToChan(config.ObtainerOutChan, proxyIps...)
+	util.AsyncProxyIpsToChan(config.WaitVerifyChan, proxyIps...)
+	return len(proxyIps)
 }
 

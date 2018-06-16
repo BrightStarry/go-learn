@@ -52,3 +52,20 @@ const(
  func (this *ProxyIp) String() string {
  	return fmt.Sprintf("host:%v,协议:%v,延迟:%v,翻墙:%v,最后验证时间：%v",this.Url.Host,this.Protocol,this.Delay.String(),this.IsJump,this.LastVerifyTime)
  }
+
+
+/**
+   ip返回对象
+*/
+type IpDTO struct{
+	// [ip]:[port]
+	Host string `json:"host"`
+	// 协议 http or https
+	Protocol string `json:"protocol"`
+	// 最后验证时间
+	LastVerifyTime time.Time `json:"lastVerifyTime"`
+	// 最后验证延迟毫秒数
+	Delay time.Duration `json:"delay"`
+	// 是否可翻墙
+	IsJump bool `json:"isJump"`
+}

@@ -57,6 +57,7 @@ func errWrapper(handler httpHandler) func(w http.ResponseWriter, r *http.Request
 			switch  {
 			case os.IsNotExist(err):
 				code = http.StatusNotFound
+
 			default:
 				code = http.StatusInternalServerError
 			}

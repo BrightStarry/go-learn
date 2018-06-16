@@ -2,11 +2,10 @@ package util
 
 import (
 	"testing"
-	"log"
+	"zx/ipProxyPool/config"
 )
 
 func TestParseToUrl(t *testing.T) {
-	for i:=0; i< 10 ;i++{
-		log.Println(		randomX(1))
-	}
+	config.Init()
+	GetByProxy("https://www.baidu.com",nil)
 }
