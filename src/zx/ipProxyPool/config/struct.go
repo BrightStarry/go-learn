@@ -65,7 +65,7 @@ type IpDTO struct{
 	// 最后验证时间
 	LastVerifyTime time.Time `json:"lastVerifyTime"`
 	// 最后验证延迟毫秒数
-	Delay time.Duration `json:"delay"`
+	Delay float64 `json:"delay"`
 	// 是否可翻墙
 	IsJump bool `json:"isJump"`
 }

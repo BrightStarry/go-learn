@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"time"
 	"sync"
+	"fmt"
 )
 
 /**
@@ -35,9 +36,8 @@ var ProxyIpStore = struct {
 /**
    初始化方法
 */
-func init() {
-	// 初始化系统参数
-	InitSystemConfig()
+func Init() {
+
 	// 初始化请求头
 	InitDefaultHeader()
 	// 初始化client
@@ -46,7 +46,7 @@ func init() {
 	InitVerifierClient()
 
 	WaitVerifyChan = make(chan *ProxyIp, Config.VerifierThreadNum*10)
-	VerifiedChan = make(chan *ProxyIp, Config.VerifiedChanBufNum)
+	VerifiedChan = make(chan *ProxyIp, 512)
 	ReVerifyChan = make(chan *ProxyIp, Config.ReVerifyThreadNum*10)
 	ProxyIpDistinctMap = &sync.Map{}
 }
@@ -70,19 +70,24 @@ type MonitorParam struct {
  */
 type SystemConfig struct {
 	// web服务端口
-	WebPort int
-	// 默认超时时间
+	WebPort string
+	// 爬虫超时时间
 	SpiderTimeout time.Duration
 	// 校验器超时时间
 	VerifierTimeout time.Duration
 	// 校验器并发数
 	VerifierThreadNum int
 	// 校验通过通道缓冲数
-	VerifiedChanBufNum int
+	//VerifiedChanBufNum int
 	// ip重校验间隔
 	ReVerifyInterval time.Duration
 	// ip重校验线程数
 	ReVerifyThreadNum int
+}
+
+func (this *SystemConfig) String() string {
+	return fmt.Sprintln("web服务端口:",this.WebPort,",爬虫超时时间:",this.SpiderTimeout,",校验器超时时间:",this.VerifierTimeout,
+		",校验器并发数:",this.VerifierThreadNum,",ip重校验间隔:",this.ReVerifyInterval,",ip重校验线程数:",this.ReVerifyThreadNum)
 }
 
 /**
@@ -91,15 +96,15 @@ type SystemConfig struct {
 func InitSystemConfig() {
 	Config = &SystemConfig{
 		// web服务端口
-		WebPort: 8080,
+		WebPort: "8080",
 		// 爬虫超时时间
 		SpiderTimeout: 15 * time.Second,
 		// 校验器超时时间
 		VerifierTimeout: 10 * time.Second,
 		// 校验器并发数
-		VerifierThreadNum: 64,
+		VerifierThreadNum: 32,
 		// 校验通过通道缓冲数
-		VerifiedChanBufNum: 32,
+		//VerifiedChanBufNum: 32,
 		// 入库ip重新校验间隔
 		ReVerifyInterval: 10 * time.Minute,
 		// ip重校验线程数

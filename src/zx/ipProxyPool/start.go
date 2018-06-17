@@ -7,12 +7,26 @@ import (
 	"zx/ipProxyPool/obtain"
 	"zx/ipProxyPool/store"
 	"zx/ipProxyPool/web"
+	"zx/ipProxyPool/config"
+	"flag"
+	"fmt"
 )
 
 /**
 	启动
  */
 func main() {
+	// 初始化系统参数
+	config.InitSystemConfig()
+
+	// 获取外部参数,修改默认系统参数
+	importExtParam()
+
+	fmt.Println("参数:",config.Config)
+
+	// 配置初始化
+	config.Init()
+
 	// 启动校验器
 	verify.StartVerifier()
 
@@ -28,7 +42,44 @@ func main() {
 	// 启动增量获取定时器
 	startObtainerIncrementTicker()
 
+	// 启动web服务
 	web.SyncStartWebServer()
+}
+
+/**
+	获取外部参数
+ */
+func importExtParam() {
+
+	// 端口
+	flag.StringVar(&config.Config.WebPort, "port", config.Config.WebPort, "服务器端口")
+	// 爬虫超时时间
+	var spiderTimeoutSecond int
+	flag.IntVar(&spiderTimeoutSecond, "stt", int(config.Config.SpiderTimeout.Seconds()), "爬虫超时时间(单位:s)")
+
+
+	// 校验器超时时间
+	var verifyTimeoutSecond int
+	flag.IntVar(&verifyTimeoutSecond, "vtt", int(config.Config.VerifierTimeout.Seconds()), "ip校验超时时间(单位:s)")
+
+	// ip校验并发数
+	flag.IntVar(&config.Config.VerifierThreadNum,"vc",config.Config.VerifierThreadNum,"ip校验并发数")
+
+	// ip重校验间隔
+	var reVerifyIntervalMinute int
+	flag.IntVar(&reVerifyIntervalMinute,"rvi",int(config.Config.ReVerifyInterval.Minutes()),"ip重校验间隔(每次重校验3分之一,单位:min)")
+
+	// ip重校验并发数
+	flag.IntVar(&config.Config.ReVerifyThreadNum,"rvc",config.Config.ReVerifyThreadNum,"ip重校验并发数")
+
+	flag.Parse()
+
+	config.Config.SpiderTimeout = time.Duration(spiderTimeoutSecond) * time.Second
+	config.Config.VerifierTimeout = time.Duration(verifyTimeoutSecond) * time.Second
+	config.Config.ReVerifyInterval = time.Duration(reVerifyIntervalMinute) * time.Minute
+
+
+
 }
 
 /**

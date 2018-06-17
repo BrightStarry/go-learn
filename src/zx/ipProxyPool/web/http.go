@@ -20,7 +20,7 @@ func SyncStartWebServer() {
 	// 监控器
 	http.HandleFunc("/monitor", errWrapper(monitorHandler))
 	http.HandleFunc("/get", errWrapper(getIpHandler))
-	if err := http.ListenAndServe(":"+strconv.Itoa(config.Config.WebPort), nil); err != nil {
+	if err := http.ListenAndServe(":"+config.Config.WebPort, nil); err != nil {
 		log.Panicln("web服务异常:", err)
 	}
 }
@@ -70,7 +70,7 @@ func getIpHandler(w http.ResponseWriter, r *http.Request) error {
 			Host:           v.Url.Host,
 			Protocol:       p,
 			LastVerifyTime: v.LastVerifyTime,
-			Delay:          v.Delay,
+			Delay:          v.Delay.Seconds(),
 			IsJump:         v.IsJump,
 		})
 	}

@@ -34,12 +34,12 @@ func ip3366Obtain(url string, count int) int{
 	var proxyIps []*config.ProxyIp
 	// 该网站由于需要一次性访问过多数据,并且经常超时,所以捕获异常
 	defer func() {
+		// 发送数据
+		util.AsyncProxyIpsToChan(config.WaitVerifyChan, proxyIps...)
 		if err:= recover();err != nil{
 			// 再次抛出
 			panic(err)
 		}
-		// 发送数据
-		util.AsyncProxyIpsToChan(config.WaitVerifyChan, proxyIps...)
 	}()
 
 	// 有四种类型
