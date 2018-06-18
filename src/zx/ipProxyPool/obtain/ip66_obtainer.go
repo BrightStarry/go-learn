@@ -20,7 +20,7 @@ type Ip66CommonObtainer struct {
 
 func (this *Ip66CommonObtainer) IncrementObtain() int {
 	//增量获取300
-	return ip66Obtain(this.Url, 300)
+	return ip66Obtain(this.Url, 301)
 }
 
 func (this *Ip66CommonObtainer) InitObtain() int {
@@ -41,12 +41,12 @@ type Ip66HttpsObtainer struct {
 
 func (this *Ip66HttpsObtainer) IncrementObtain() int {
 	//增量获取200
-	return ip66Obtain(this.Url, 200)
+	return ip66Obtain(this.Url, 201)
 }
 
 func (this *Ip66HttpsObtainer) InitObtain() int {
 	// 初始化时，提取1001
-	return ip66Obtain(this.Url, 300)
+	return ip66Obtain(this.Url, 301)
 }
 
 func (this *Ip66HttpsObtainer) GetWebObtainer() *WebObtainer {
@@ -58,12 +58,10 @@ func (this *Ip66HttpsObtainer) GetWebObtainer() *WebObtainer {
  */
 func ip66Obtain(url string, initSum int) int{
 	u := url + strconv.Itoa(initSum)
-	response := util.Get(u)
-	doc := util.ResponseToDocument(response)
+	doc := util.GetOfDocument(u)
 	bodyEle := doc.Find("body")
 	body, _ := bodyEle.Html()
 	arr := strings.Split(body, "<br/>\n\t\t")
-	//proxyIps := make([]*config.ProxyIp, initSum-1)
 	var proxyIps []*config.ProxyIp
 	//遍历,舍弃最后一个ip，因为还需要切割
 	for i := 0; i < len(arr)-1; i++ {

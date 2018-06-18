@@ -56,6 +56,9 @@ func getIpHandler(w http.ResponseWriter, r *http.Request) error {
 	// 获取ip
 	//ips := store.GetIpsAtLast(length)
 	ips := config.ProxyIpStore.Queue[:]
+	if length > len(ips){
+		length = len(ips)
+	}
 	// 根据延迟从小到大排序
 	ips = util.Sort(ips, len(ips))[:length]
 	var result []*config.IpDTO

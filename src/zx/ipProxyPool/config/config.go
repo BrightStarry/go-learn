@@ -5,6 +5,7 @@ import (
 	"time"
 	"sync"
 	"fmt"
+	"net/url"
 )
 
 /**
@@ -45,9 +46,9 @@ func Init() {
 	// 初始化校验器client pool
 	InitVerifierClient()
 
-	WaitVerifyChan = make(chan *ProxyIp, Config.VerifierThreadNum*10)
+	WaitVerifyChan = make(chan *ProxyIp, Config.VerifierThreadNum*100)
 	VerifiedChan = make(chan *ProxyIp, 512)
-	ReVerifyChan = make(chan *ProxyIp, Config.ReVerifyThreadNum*10)
+	ReVerifyChan = make(chan *ProxyIp, Config.ReVerifyThreadNum*100)
 	ProxyIpDistinctMap = &sync.Map{}
 }
 
@@ -102,13 +103,13 @@ func InitSystemConfig() {
 		// 校验器超时时间
 		VerifierTimeout: 10 * time.Second,
 		// 校验器并发数
-		VerifierThreadNum: 32,
+		VerifierThreadNum: 64,
 		// 校验通过通道缓冲数
 		//VerifiedChanBufNum: 32,
 		// 入库ip重新校验间隔
 		ReVerifyInterval: 10 * time.Minute,
 		// ip重校验线程数
-		ReVerifyThreadNum: 32,
+		ReVerifyThreadNum: 64,
 	}
 }
 
@@ -155,3 +156,61 @@ func InitDefaultHeader() {
 		"Cache-Control":             {"max-age=0"},
 	}
 }
+
+// http/https
+const(
+	HttpFlag = 0
+	HttpsFlag = 1
+	SocksFlag = 2
+	Http = "http"
+	Https = "https"
+)
+
+
+// 匿名级别
+const(
+	// 普通
+	Normal = 0
+	// 匿名
+	Anonymity = 1
+)
+
+/**
+	代理ip
+ */
+type ProxyIp struct {
+	// ip-port- https/http
+	Url *url.URL
+	// 协议, http/ https/ socks4/5
+	Protocol uint8
+	// 最后验证时间
+	LastVerifyTime time.Time
+	// 最后验证延迟毫秒数
+	Delay time.Duration
+	// 是否可翻墙
+	IsJump bool
+	// 类型,普通:0  匿名:1
+	Type uint8
+}
+
+func (this *ProxyIp) String() string {
+	return fmt.Sprintf("host:%v,协议:%v,延迟:%v,翻墙:%v,最后验证时间：%v",this.Url.Host,this.Protocol,this.Delay.String(),this.IsJump,this.LastVerifyTime)
+}
+
+
+/**
+   ip返回对象
+*/
+type IpDTO struct{
+	// [ip]:[port]
+	Host string `json:"host"`
+	// 协议 http or https
+	Protocol string `json:"protocol"`
+	// 最后验证时间
+	LastVerifyTime time.Time `json:"lastVerifyTime"`
+	// 最后验证延迟毫秒数
+	Delay float64 `json:"delay"`
+	// 是否可翻墙
+	IsJump bool `json:"isJump"`
+}
+

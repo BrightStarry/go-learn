@@ -18,6 +18,10 @@ func AsyncProxyIpsToChan(c chan *config.ProxyIp,ip ...*config.ProxyIp) {
 	}()
 }
 
+
+/**
+	希尔排序
+ */
 func Sort(arr []*config.ProxyIp, size int) []*config.ProxyIp {
 	in := size / 2 // 起始增量,为一半元素
 	// 循环到增量为0 (1/2=0)

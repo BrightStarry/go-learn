@@ -11,7 +11,7 @@ import (
  */
 
 func TestXiciAnonymity_InitObtain(t *testing.T) {
-
+	config.InitSystemConfig()
 	config.Init()
-	WebObtainers[6].IncrementObtain()
+	WebObtainers[7].IncrementObtain()
 }
