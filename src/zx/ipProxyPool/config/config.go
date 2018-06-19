@@ -97,7 +97,7 @@ func (this *SystemConfig) String() string {
 func InitSystemConfig() {
 	Config = &SystemConfig{
 		// web服务端口
-		WebPort: "8080",
+		WebPort: "9999",
 		// 爬虫超时时间
 		SpiderTimeout: 15 * time.Second,
 		// 校验器超时时间
@@ -175,6 +175,15 @@ const(
 	Anonymity = 1
 )
 
+// 来自-所有要爬取的网站
+const(
+	Xici = iota
+	Ip66
+	Kuaidaili
+	Ip3366
+	Ip89
+)
+
 /**
 	代理ip
  */
@@ -191,6 +200,8 @@ type ProxyIp struct {
 	IsJump bool
 	// 类型,普通:0  匿名:1
 	Type uint8
+	// 来自
+	From uint8
 }
 
 func (this *ProxyIp) String() string {

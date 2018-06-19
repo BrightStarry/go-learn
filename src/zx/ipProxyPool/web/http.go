@@ -49,9 +49,12 @@ func getIpHandler(w http.ResponseWriter, r *http.Request) error {
 	r.ParseForm()
 	l := r.Form.Get("len")
 	length, err := strconv.Atoi(l)
+	// 如果len为nil或格式有误，默认为最大
 	if err != nil {
-		return ServiceError("len格式不正确")
+		length = 9999999
 	}
+	isJump := r.Form.Get("isJump")
+
 
 	// 获取ip
 	//ips := store.GetIpsAtLast(length)
@@ -61,6 +64,18 @@ func getIpHandler(w http.ResponseWriter, r *http.Request) error {
 	}
 	// 根据延迟从小到大排序
 	ips = util.Sort(ips, len(ips))[:length]
+
+	// 如果只需要翻墙服务器
+	if isJump == "1"{
+		var tempIps []*config.ProxyIp
+		for _,v:= range ips{
+			if v.IsJump{
+				tempIps = append(tempIps, v)
+			}
+		}
+		ips = tempIps
+	}
+
 	var result []*config.IpDTO
 	var p string
 	for _, v := range ips {

@@ -13,6 +13,9 @@ func AsyncProxyIpsToChan(c chan *config.ProxyIp,ip ...*config.ProxyIp) {
 			if v == nil {
 				continue
 			}
+			if len(c) >= cap(c){
+				return
+			}
 			c <- v
 		}
 	}()

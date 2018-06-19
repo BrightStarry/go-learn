@@ -78,6 +78,7 @@ func ip66Obtain(url string, initSum int) int{
 		proxyIps = append(proxyIps,&config.ProxyIp{
 			Url:  url,
 			Type: config.Normal,
+			From:config.Ip66,
 		})
 	}
 	util.AsyncProxyIpsToChan(config.WaitVerifyChan, proxyIps...)

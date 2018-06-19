@@ -69,6 +69,7 @@ func kuaidailiOtain(url string,count int) int{
 			proxyIp := &config.ProxyIp{
 				Url:      url,
 				Type:     config.Anonymity,
+				From:config.Kuaidaili,
 			}
 			proxyIps = append(proxyIps,proxyIp)
 		})

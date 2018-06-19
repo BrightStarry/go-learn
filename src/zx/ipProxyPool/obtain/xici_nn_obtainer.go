@@ -73,6 +73,7 @@ func xiciObtain(url string,count int,t uint8) int {
 			proxyIp := &config.ProxyIp{
 				Url:url,
 				Type:t,
+				From: config.Xici,
 			}
 			proxyIps = append(proxyIps, proxyIp)
 		})

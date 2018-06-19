@@ -61,6 +61,7 @@ func ip3366Obtain(url string, count int) int{
 				}
 				proxyIp := &config.ProxyIp{
 					Url:url,
+					From:config.Ip3366,
 				}
 				proxyIps = append(proxyIps, proxyIp)
 			})

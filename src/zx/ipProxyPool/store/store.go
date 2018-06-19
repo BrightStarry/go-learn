@@ -32,7 +32,7 @@ func StartVerifyTicker() {
 	ticker := time.Tick(config.Config.ReVerifyInterval)
 	go func() {
 		for t := range ticker {
-			log.Println(t, " 启动定时校验任务,当前待校验通道长度:", len(config.ReVerifyChan))
+			log.Println(t, " 启动定时校验任务----------------")
 			verifyTask()
 		}
 	}()

@@ -21,14 +21,16 @@ func InitWebObtainers() {
 	var kuaidailiCommon Obtainer = &KuaidailiCommonObtainer{NewDefaultWebInfo("https://www.kuaidaili.com/free/intr/", "快代理普通", 2, 6 * time.Hour)}
 	var ip3366 Obtainer = &Ip3366Obtainer{NewDefaultWebInfo("http://www.ip3366.net/?stype=%d&page=%d", "ip3366", 2, 15 * time.Minute)}
 	var ip89 Obtainer = &Ip89Obtainer{NewDefaultWebInfo("http://www.89ip.cn/tqdl.html?api=1&num=", "ip89", 2, 3 * time.Minute)}
-	WebObtainers = append(WebObtainers,xiciHttp)
-	WebObtainers = append(WebObtainers,xiciHttps)
-	WebObtainers = append(WebObtainers,ip66Common)
-	WebObtainers = append(WebObtainers,ip66Https)
-	WebObtainers = append(WebObtainers,kuaidailiNn)
-	WebObtainers = append(WebObtainers,kuaidailiCommon)
-	WebObtainers = append(WebObtainers,ip3366)
-	WebObtainers = append(WebObtainers,ip89)
+	WebObtainers =  []Obtainer{
+		xiciHttp,
+		xiciHttps,
+		ip66Common,
+		ip66Https,
+		kuaidailiNn,
+		kuaidailiCommon,
+		ip3366,
+		ip89,
+	}
 }
 
 // 保存所有网站信息
