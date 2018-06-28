@@ -52,6 +52,7 @@ type Configuration struct{
 	// 当前认证模式
 	Method byte
 
+
 }
 
 /*toString方法*/
@@ -67,9 +68,10 @@ func (this Configuration) String() string {
 /*构造默认的系统配置*/
 func NewDefaultConfig() *Configuration {
 	return &Configuration{
-		Username:"zx",
-		Password:"123456",
-		Port:"8081",
-		Method:UnMethod,
+		Username: "zx",
+		Password: "123456",
+		Port:     "8081",
+		Method:   UnMethod,
+	
 	}
 }

@@ -129,7 +129,7 @@
 //		if _, err := p.WriteTo(data, nil, src); err != nil {
 //			// error handling
 //		}
-//		dst := &net.UDPAddr{IP: group, Port: 1024}
+//		dst := &net.UDPAddr{IP: group, JumpPort: 1024}
 //		for _, ifi := range []*net.Interface{en0, en1} {
 //			if err := p.SetMulticastInterface(ifi); err != nil {
 //				// error handling

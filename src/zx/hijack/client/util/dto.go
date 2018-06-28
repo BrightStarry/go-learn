@@ -33,31 +33,6 @@ type HandshakeResponse struct{
 	Method uint8
 }
 
-/*
-	客户端密码认证请求
-*/
-type PwdAuthenticationRequest struct{
-	// 一个无意义标识, 0x01
-	Pointless uint8
-	// 用户名长度
-	UsernameLength uint8
-	// 用户名,根据UsernameLength确定字节长度
-	Username []byte
-	// 密码长度
-	PasswordLength uint8
-	// 密码，根据PasswordLength确定长度
-	Password []byte
-}
-
-/*
-	密码认证响应
-*/
-type PwdAuthenticationResponse struct{
-	// 一个无意义标识, 0x01
-	Pointless uint8
-	// 验证结果 0x00成功； 其余失败
-	Result uint8
-}
 
 /*
 	客户端连接请求

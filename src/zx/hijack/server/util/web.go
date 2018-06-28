@@ -1,66 +1,43 @@
-package test
+package util
 
 import (
-	"os/exec"
-	"testing"
 	"net/http"
 	"log"
 	"io/ioutil"
 )
 
-// 通用测试类
-
-/**
-	测试自动配置pac脚本
- */
-func TestAutoConfigPAC(t *testing.T) {
-	cmd := exec.Command("reg","add","HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
-		"/v","AutoConfigURL", "/t","REG_SZ", "/d","xxx", "/f")
-	cmd.Run()
-	cmd2 := exec.Command("ipconfig","/flushdns")
-	cmd2.Run()
-}
-
-/**
-	测试启动web服务，返回pac脚本
- */
-func TestWeb(t *testing.T) {
-	SyncStartWebServer()
-}
-
-var pacByte = readPac()
+var pacByte []byte
 
 /**
 	启动web服务
  */
 func SyncStartWebServer() {
-
+	readPac() // 读取配置文件
 	http.HandleFunc("/pac", errWrapper(pac))
-	if err := http.ListenAndServe(":8080", nil); err != nil {
+	if err := http.ListenAndServe(":" + Config.Port, nil); err != nil {
 		log.Panicln("web服务异常:", err)
 	}
 }
 
 /**
-读取pac
+	从本地读取pac
  */
-func readPac() []byte{
-	bytes, err := ioutil.ReadFile("C:\\Users\\lenovo\\Desktop\\test.pac")
+func readPac(){
+	bytes, err := ioutil.ReadFile(Config.PacPath)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln("读取pac文件失败:",err)
 	}
-	return bytes
+	pacByte = bytes
 }
 
 /**
 	返回pac文件
  */
- func pac(w http.ResponseWriter, r *http.Request)error{
-
-	 w.Header().Set("content-type", "application/x-ns-proxy-autoconfig")
-	 w.Write(pacByte)
-	 return nil
- }
+func pac(w http.ResponseWriter, r *http.Request)error{
+	//w.Header().Set("content-type", "application/x-ns-proxy-autoconfig")
+	w.Write(pacByte)
+	return nil
+}
 
 
 /*
@@ -123,4 +100,3 @@ func (this ServiceError) Error() string {
 func (this ServiceError) Message() string {
 	return string(this)
 }
-

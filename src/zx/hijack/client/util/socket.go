@@ -62,15 +62,6 @@ func HandlerPre(conn *net.TCPConn) (err error) {
 	if err != nil {
 		return
 	}
-	/**
-		处理密码验证
-	*/
-	if Config.Method == PwdMethod {
-		err = handlerPwdAuthentication(conn)
-		if err != nil {
-			return
-		}
-	}
 
 	return
 }
@@ -94,35 +85,7 @@ func handlerHandshake(conn *net.TCPConn) error {
 	return nil
 }
 
-/*处理密码认证*/
-func handlerPwdAuthentication(conn *net.TCPConn) ( err error) {
-	// 读取
-	var request *PwdAuthenticationRequest
-	request, err = readPwdAuthenticationRequest(conn)
-	if err != nil {
-		return
-	}
-	// 读取成功才对客户端进行响应
-	response := &PwdAuthenticationResponse{One, Zero}
 
-	/**
-		校验密码
-	 */
-	if Config.Username != string(request.Username) || Config.Password != string(request.Password) {
-		// 失败响应
-		response.Result = One
-		sendResponse(conn, response)
-		err = errors.New("用户密码错误")
-		return
-	}
-
-	// 成功响应
-	err = sendResponse(conn, response)
-	if err != nil {
-		return
-	}
-	return
-}
 
 /*读取客户端握手请求对象,生成响应对象*/
 func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *HandshakeResponse, err error) {
@@ -147,10 +110,10 @@ func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *Handshak
 	}
 
 	// 响应对象
-	response = &HandshakeResponse{Version, Config.Method}
+	response = &HandshakeResponse{Version, UnMethod}
 
 	// methods字段
-	if request.Methods != Config.Method {
+	if request.Methods != UnMethod {
 		response.Method = NotSupport
 		err = errors.New("不支持客户端的认证方式")
 		return
@@ -158,37 +121,6 @@ func readHandshakeRequestGenerateResponse(conn *net.TCPConn) (response *Handshak
 	return
 }
 
-/*读取密码认证请求对象*/
-func readPwdAuthenticationRequest(conn *net.TCPConn) (result *PwdAuthenticationRequest, err error) {
-	// 设置超时时间
-	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
-	// 读取字节
-	var buf []byte
-	buf, err = readMessage(conn, 512)
-	if err != nil {
-		return
-	}
-
-	// 返回对象
-	result = new(PwdAuthenticationRequest)
-
-	// 转换为读取器
-	reader := bytes.NewReader(buf)
-	// 读取无意义标识
-	if result.Pointless, err = reader.ReadByte();err != nil {
-		return
-	}
-	// 读取用户名
-	if result.UsernameLength, result.Username, err = readByLenField(reader);err != nil {
-		return
-	}
-
-	// 读取密码
-	if result.PasswordLength, result.Password, err = readByLenField(reader);err != nil {
-		return
-	}
-	return
-}
 
 /*处理连接请求*/
 func HandlerConnect(conn *net.TCPConn) (error) {

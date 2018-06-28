@@ -2138,7 +2138,7 @@ func unpackSRVResource(msg []byte, off int) (SRVResource, error) {
 	}
 	port, off, err := unpackUint16(msg, off)
 	if err != nil {
-		return SRVResource{}, &nestedError{"Port", err}
+		return SRVResource{}, &nestedError{"JumpPort", err}
 	}
 	var target Name
 	if _, err := target.unpackCompressed(msg, off, false /* allowCompression */); err != nil {

@@ -40,12 +40,10 @@
 ~~~
 在根目录执行
 set GOOS=linux
-set GOARCH=amd64
 然后再执行其他命令
 
 要恢复的话执行
 set GOOS=windows
-set GOARCH=amd64
 
 也可以直接如下，构建出linux的执行文件
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build HTTPServer.go

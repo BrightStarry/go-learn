@@ -198,7 +198,7 @@ const (
 	AddrFamilyXTPoverIPv4                   = 19    // XTP over IP version 4
 	AddrFamilyXTPoverIPv6                   = 20    // XTP over IP version 6
 	AddrFamilyXTPnativemodeXTP              = 21    // XTP native mode XTP
-	AddrFamilyFibreChannelWorldWidePortName = 22    // Fibre Channel World-Wide Port Name
+	AddrFamilyFibreChannelWorldWidePortName = 22    // Fibre Channel World-Wide JumpPort Name
 	AddrFamilyFibreChannelWorldWideNodeName = 23    // Fibre Channel World-Wide Node Name
 	AddrFamilyGWID                          = 24    // GWID
 	AddrFamilyL2VPN                         = 25    // AFI for L2VPN information
@@ -218,6 +218,6 @@ const (
 	AddrFamilyMACFinal24bits                = 16392 // MAC/24
 	AddrFamilyMACFinal40bits                = 16393 // MAC/40
 	AddrFamilyIPv6Initial64bits             = 16394 // IPv6/64
-	AddrFamilyRBridgePortID                 = 16395 // RBridge Port ID
+	AddrFamilyRBridgePortID                 = 16395 // RBridge JumpPort ID
 	AddrFamilyTRILLNickname                 = 16396 // TRILL Nickname
 )

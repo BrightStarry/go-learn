@@ -130,7 +130,7 @@
 //		if _, err := p.WriteTo(data[:n], nil, src); err != nil {
 //			// error handling
 //		}
-//		dst := &net.UDPAddr{IP: group, Port: 1024}
+//		dst := &net.UDPAddr{IP: group, JumpPort: 1024}
 //		wcm := ipv6.ControlMessage{TrafficClass: 0xe0, HopLimit: 1}
 //		for _, ifi := range []*net.Interface{en0, en1} {
 //			wcm.IfIndex = ifi.Index

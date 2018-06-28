@@ -9,10 +9,6 @@ import (
 const(
 	// 无需认证
 	UnMethod = 0x00
-	UnMethodName = "no"
-	// 密码认证
-	PwdMethod = 0x02
-	PwdMethodName = "pwd"
 )
 
 // 地址类型
@@ -43,33 +39,25 @@ var Config = NewDefaultConfig()
 
 /*系统配置*/
 type Configuration struct{
-	// 用户名
-	Username string
-	// 密码
-	Password string
 	// 启动端口
-	Port string
-	// 当前认证模式
-	Method byte
+	JumpPort string
+	// web服务端口
+	WebPort string
+	// pac获取url
+	PacUrl string
 
 }
 
 /*toString方法*/
 func (this Configuration) String() string {
-	if this.Method == UnMethod {
-		return fmt.Sprintln("认证模式:",UnMethodName,",端口:",this.Port)
-	}else{
-		return fmt.Sprintln("认证模式:",PwdMethodName,",端口:",this.Port,",用户名:",this.Username,",密码:",this.Password)
-	}
-
+	return fmt.Sprintln("启动端口:",this.JumpPort,",web服务端口:",this.WebPort,",pac获取url:",this.PacUrl)
 }
 
 /*构造默认的系统配置*/
 func NewDefaultConfig() *Configuration {
 	return &Configuration{
-		Username:"zx",
-		Password:"123456",
-		Port:"8081",
-		Method:UnMethod,
+		JumpPort: "8081",
+		WebPort:  "9999",
+		PacUrl: "http://106.14.7.29:9000/pac",
 	}
 }
