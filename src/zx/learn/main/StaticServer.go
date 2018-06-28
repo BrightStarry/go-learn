@@ -18,7 +18,7 @@ import (
 var mux = make(map[string]func(http.ResponseWriter, *http.Request))
 
 // 当前工作路径
-var rootPath = "D:\\"
+var rootPath = "/"
 
 func main() {
 	server := http.Server{
