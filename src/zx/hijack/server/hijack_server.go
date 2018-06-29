@@ -29,6 +29,11 @@ func readExternalParam() {
 	// pac文件路径
 	var pacPath string
 	flag.StringVar(&pacPath, "pac", util.Config.PacPath, "pac文件路径")
+
+	// 数据存储路径
+	var dataPath string
+	flag.StringVar(&dataPath, "data", util.Config.DataPath, "数据文件路径")
+
 	flag.Parse()
 
 	util.Config.Port = port

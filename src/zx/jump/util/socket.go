@@ -6,9 +6,9 @@ import (
 	"encoding/binary"
 	"errors"
 	"bytes"
-	"io"
 	"strconv"
 	"log"
+	"fmt"
 )
 
 /*socket相关*/
@@ -209,24 +209,45 @@ func HandlerConnect(conn *net.TCPConn) (error) {
 		return err
 	}
 
+
 	// 连接到目标服务器
-	targetConn, err := connectToTarget(request.Target)
-	if err != nil {
-		sendResponse(conn, response)
-		return err
-	}
-	defer targetConn.Close()
+	//targetConn, err := connectToTarget(request.Target)
+	//targetConn, err := connectToTarget("www.baidu.com:80")
+	fmt.Println(request)
+	//if err != nil {
+	//	sendResponse(conn, response)
+	//	return err
+	//}
+	//defer targetConn.Close()
 
 	// 连接成功
 	response.Response = Zero
-	response.Address, response.Port = Ip2Bytes(targetConn.LocalAddr().String())
+	//response.Address, response.Port = Ip2Bytes(targetConn.LocalAddr().String())
+	//response.Address =
+	//response.Port =
 	// 发送响应
 	if err = sendResponse(conn, response);err != nil {
 		return err
 	}
 
-	go io.Copy(targetConn, conn)
-	io.Copy(conn, targetConn)
+	//go io.Copy(targetConn, conn)
+	//io.Copy(conn, targetConn)
+
+	// 设置超时时间
+	conn.SetReadDeadline(time.Now().Add(ReadTimeout))
+	// 读取字节
+	var buf []byte
+	buf, err = readMessage(conn, 512)
+	if err != nil {
+		return err
+	}
+	fmt.Println(string(buf))
+
+	s := "HTTP/1.1 200 Connection Established"
+	conn.Write([]byte(s))
+	s = "HTTP/1.1 302\r\nLocation: https://www.baidu.com\r\nContent-Language: zh-CN\r\nContent-Length: 0\r\n\r\n"
+	conn.Write([]byte(s))
+
 
 	return nil
 }

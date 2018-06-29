@@ -22,7 +22,7 @@ var rootPath = "/"
 
 func main() {
 	server := http.Server{
-		Addr:        ":8081",
+		Addr:        ":80",
 		Handler:     &myHandler{},
 		ReadTimeout: 5 * time.Second,
 	}

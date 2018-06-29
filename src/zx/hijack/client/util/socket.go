@@ -141,8 +141,10 @@ func HandlerConnect(conn *net.TCPConn) (error) {
 		return err
 	}
 
+	//fmt.Println(request)
 	// 连接到目标服务器
 	targetConn, err := connectToTarget(request.Target)
+	//targetConn, err := connectToTarget("www.baidu.com:443")
 	if err != nil {
 		sendResponse(conn, response)
 		return err
