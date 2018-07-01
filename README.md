@@ -36,6 +36,31 @@
     也可以执行 go tool pprof http://127.0.0.01:8080/debug/pprof/profile ,可以获取30s内的cpu使用率结果(在30s后的命令行中,
     输入web(和下面go tool pprof cpu.out一样,会弹出图表))  
     其他的可以查看该包源码,例如还可以查看heap情况
+    
+- 如下写法，可输出帮助文字
+```
+flag.CommandLine.Usage = usage
+const Version = "0.1.1"
+func usage() {
+	prog := os.Args[0]
+	fmt.Fprintf(os.Stderr, "usage: %s [-host=<hostname>] [-listen=<address>] [upstream]\n", prog)
+	fmt.Fprintf(os.Stderr, "version: %s\n", Version)
+	fmt.Fprint(os.Stderr, "examples:\n")
+	fmt.Fprintf(os.Stderr, "    %s 8000                # create proxy to localhost:8000\n", prog)
+	fmt.Fprintf(os.Stderr, "    %s -host=foo.dev 9000  # generate a cert for foo.dev:9000\n", prog)
+	fmt.Fprintf(os.Stderr, "    %s -listen=:8888       # listen on port 8888\n", prog)
+}
+```  
+
+- 如下语句，可以设置当前程序能够使用的最大CPU核心数量
+> runtime.GOMAXPROCS(1)
+
+- 线上一个服务有个严重问题，处理消息数1k/s提升不上去，经过查看是阻塞在了一个新加的函数上，这个函数负责收集信息，送到一个channel上，再由某个函数处理，这个处理函数很简单，看不出任何问题，最大的特点是为了不加锁，只起一个goroutine。
+  问题很明显了，只起一个goroutine，当系统繁忙和存在大量goroutine的时候，会得不到调度，无法处理收集到的数据，然后channel缓冲满，导致收集函数阻塞在发送数据到channel上，进而阻塞了消息处理。
+  该获得调度的没有被调度，不该获得调度的却获得调度了，而go runtime不可能知道那个goroutine应该被调度，只能是公平调度，但是公平调度却造成了堵塞！
+  这种问题其实很普遍，不是一个goroutine的问题！就算你开了多个goroutine，仍然可能得不到调度！（当然，是在繁忙的时候，大部分时候不存在这种问题）
+  当然，这个问题可以用全局队列来解决，不使用channel，也就不存在阻塞的问题，有些优秀的库就是这样提升吞吐的。但是仍然会有偶尔延迟的情况，因此最后还是要解决，调度的问题！  
+> runtime.LockOSThread() 该语句可以让当前goroutine优先调度，当调用runtime.UnlockOSThread()后，则取消该优先  
 #### 跨平台编译
 ~~~
 在根目录执行

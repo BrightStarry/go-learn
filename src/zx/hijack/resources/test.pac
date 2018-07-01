@@ -1,5 +1,5 @@
 var blackList = [
-    "baidu.com",
+    "zhihu.com",
 ]
 
 var blankList = [
@@ -7,7 +7,8 @@ var blankList = [
 ]
 
 
-var proxy = "SOCKS5 127.0.0.1:8081"
+var socks = "SOCKS5 127.0.0.1:8081"
+var proxy = "PROXY 127.0.0.1:8080"
 var direct = "DIRECT"
 
 function FindProxyForURL(url, host) {
