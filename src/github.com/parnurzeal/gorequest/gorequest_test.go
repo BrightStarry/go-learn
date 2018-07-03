@@ -1504,7 +1504,7 @@ func TestProxyFunc(t *testing.T) {
 			return r, nil
 		})
 	ts2 := httptest.NewServer(proxy)
-	// sending request via Proxy
+	// sending request via Pattern
 	resp, body, _ := New().Proxy(ts2.URL).Get(ts.URL).End()
 	if resp.StatusCode != 200 {
 		t.Error("Expected 200 Status code")

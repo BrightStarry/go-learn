@@ -2823,7 +2823,7 @@ func foreachHeaderElement(v string, fn func(string)) {
 var connHeaders = []string{
 	"Connection",
 	"Keep-Alive",
-	"Proxy-Connection",
+	"Pattern-Connection",
 	"Transfer-Encoding",
 	"Upgrade",
 }

@@ -1,11 +1,97 @@
-package util
+package config
 
 import (
+	"time"
+	"fmt"
 	"bytes"
 	"encoding/binary"
 )
 
-/*网络传输对象*/
+// 代理模式
+const(
+	// 普通socks5
+	Common = "common"
+	// 客户端-服务端模式
+	CS ="cs"
+)
+
+
+// 认证模式
+const(
+	// 无需认证
+	UnMethod = 0x00
+	UnMethodName = "no"
+	// 密码认证
+	PwdMethod = 0x02
+	PwdMethodName = "pwd"
+)
+
+// 地址类型
+const(
+	Ipv4 = 0x01
+	DomainName = 0x03
+	Ipv6 = 0x04
+)
+
+const(
+	// 默认版本
+	Version = 0x05
+	// 默认值 0x01
+	One = 0x01
+	// 默认值 0x00
+	Zero = 0x00
+	// 表示不支持客户端的认证方式
+	NotSupport = 0xff
+	// 读取超时时间
+	ReadTimeout = 15 * time.Second
+	// 数据发送超时时间
+	WriteTimeout = 15 * time.Second
+)
+
+// 配置
+var Config = NewDefaultConfig()
+
+
+/*系统配置*/
+type Configuration struct{
+	// 用户名
+	Username string
+	// 密码
+	Password string
+	// 启动端口
+	Port string
+	// 当前认证模式
+	Method byte
+	// 代理模式
+	Pattern string
+	// 服务器地址(cs模式中使用)  ip:port
+	Server string
+	// 服务器密码
+	ServerPwd string
+	// 服务器密码字节
+	ServerPwdByte []byte
+	// 服务器密码长度
+	ServerPwdLen byte
+}
+
+/*toString方法*/
+func (this Configuration) String() string {
+	return fmt.Sprintln("认证模式:",PwdMethodName,",端口:",this.Port,",用户名:",this.Username,",密码:",this.Password,
+		",代理模式:",this.Pattern,",服务器地址:",this.Server,"服务器密码:",this.ServerPwd)
+
+}
+
+/*构造默认的系统配置*/
+func NewDefaultConfig() *Configuration {
+	return &Configuration{
+		Username: "root",
+		Password: "123456",
+		Port:     "9999",
+		Method:   UnMethod,
+		Pattern:  CS,
+		ServerPwd: "123456",
+	}
+}
 
 /*
 	客户端握手请求对象
@@ -14,7 +100,7 @@ type HandshakeRequest struct {
 	// 版本，  0x05
 	Version uint8
 	// Methods字段占用字节数, 0x01
-	NMethods uint8
+	MethodsLen uint8
 	/*
 		客户端支持的认证方式,
 		0x00 不认证; 0x01 通用安全服务应用程序接口(GSSAPI); 0x02用户名/密码(USERNAME/PASSWORD); 0xff 没有可接受方法
@@ -120,14 +206,8 @@ func (this ConnectResponse)ToBytes() []byte {
 	return buf.Bytes()
 }
 
-/*可转为数组接口*/
-type Byteable interface {
-	ToBytes() []byte
-}
 
 /*用户信息*/
 type User struct{
 	Ip string
 }
-
-

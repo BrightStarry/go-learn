@@ -2033,7 +2033,7 @@ func TestTransportRejectsConnHeaders(t *testing.T) {
 			want:  "Accept-Encoding,User-Agent",
 		},
 		{
-			key:   "Proxy-Connection", // just deleted and ignored
+			key:   "Pattern-Connection", // just deleted and ignored
 			value: []string{"keep-alive"},
 			want:  "Accept-Encoding,User-Agent",
 		},

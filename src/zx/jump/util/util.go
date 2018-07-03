@@ -1,21 +1,55 @@
 package util
 
 import (
-	"bytes"
-	"errors"
 	"net"
+	"bytes"
 	"time"
-	"strconv"
-	"strings"
-	"unsafe"
 	"encoding/binary"
+	"strings"
+	"strconv"
+	"errors"
+	"log"
 )
 
-/*工具类*/
+/*服务端和客户端通用工具类*/
 
+
+/*
+	启动tcp服务
+*/
+func StartTcpServer(port string,handler func (*net.TCPConn)) {
+	listener, err := net.Listen("tcp", ":"+port)
+	if err != nil {
+		log.Fatalln("服务启动失败:", err)
+	}
+	log.Println("服务启动成功!")
+	defer listener.Close()
+
+	for {
+		conn, err := listener.Accept()
+		if err != nil {
+			log.Println("接受客户端连接失败:", err)
+		}
+		log.Println("connect:", conn.RemoteAddr().String())
+		// 处理请求
+		go handler(conn.(*net.TCPConn))
+	}
+}
+
+/*连接到目标服务器*/
+func ConnectToTarget(target string,timeout time.Duration) (conn *net.TCPConn, err error) {
+	var dial net.Conn
+	dial, err = net.DialTimeout("tcp", target, timeout)
+	if err != nil {
+		return
+	}
+	conn = dial.(*net.TCPConn)
+	return
+}
 
 /*读取消息,指定默认读取长度*/
-func readMessage(conn *net.TCPConn,defaultLen int) ( []byte, error) {
+func ReadMessage(conn *net.TCPConn,defaultLen int,timeout time.Duration) ( []byte, error) {
+	conn.SetReadDeadline(time.Now().Add(timeout))// 设置超时时间
 	// 读取字节
 	buf := make([]byte,defaultLen)
 	n,err := conn.Read(buf)
@@ -30,7 +64,7 @@ func readMessage(conn *net.TCPConn,defaultLen int) ( []byte, error) {
 }
 
 /*读取消息,指定默认读取长度*/
-func readMessageByReader(reader *bytes.Reader,defaultLen int) ( []byte, int, error) {
+func ReadMessageByReader(reader *bytes.Reader,defaultLen int) ( []byte, int, error) {
 	// 读取字节
 	buf := make([]byte,defaultLen)
 	n,err := reader.Read(buf)
@@ -44,10 +78,10 @@ func readMessageByReader(reader *bytes.Reader,defaultLen int) ( []byte, int, err
 	return buf[:n],n,nil
 }
 
-/*发送响应*/
-func sendResponse(conn *net.TCPConn,data interface{})(err error) {
+/*发送消息*/
+func SendMessage(conn *net.TCPConn,data interface{},timeout time.Duration)(err error) {
 	// 设置超时时间
-	conn.SetWriteDeadline(time.Now().Add(WriteTimeout))
+	conn.SetWriteDeadline(time.Now().Add(timeout))
 
 	switch data.(type) {
 	case Byteable:
@@ -56,25 +90,23 @@ func sendResponse(conn *net.TCPConn,data interface{})(err error) {
 		// 发送对象， 该方法的data支持定长的类型（切片等都需要定长）
 		err = binary.Write(conn,binary.LittleEndian,data)
 	}
-
 	return
 }
 
 /*读取1个字节的长度字节，并读取对应长度的后续字节*/
-func readByLenField(reader *bytes.Reader) (length byte,data []byte,err error) {
+func ReadByLen(reader *bytes.Reader) (length byte,data []byte,err error) {
 	length,err = reader.ReadByte()
 	if err != nil {
 		return
 	}
 	var n int
-	data,n,err = readMessageByReader(reader,int(length))
+	data,n,err = ReadMessageByReader(reader,int(length))
 	if n != int(length) {
 		err = errors.New("长度不正确")
 		return
 	}
 	return
 }
-
 
 /*[]byte转ip 字符串*/
 func Bytes2Ip(data []byte) string {
@@ -109,10 +141,4 @@ func Ip2Bytes(addr string) (ip []byte,port uint16) {
 	port = uint16(v3)
 	return
 }
-
-/*对象转[]byte*/
-func Struct2Bytes(data interface{}) []byte{
-	return *(*[]byte)(unsafe.Pointer(&data))
-}
-
 
