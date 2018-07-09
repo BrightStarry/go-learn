@@ -8,10 +8,13 @@ import (
 	"io"
 	"bytes"
 	"time"
+	"flag"
 )
 
 func main() {
-	startServer1("5601")
+	port := flag.String("port","8080","端口")
+	flag.Parse()
+	startServer1(*port)
 }
 
 /*启动服务器*/
