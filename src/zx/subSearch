@@ -13,12 +13,12 @@ import (
 
 /*
 搜索思路：
-1.从配置文件读取字幕路径和视频路径，视频路径默认为空，如果为空，则要在运行后输入视频地址。
-2.读取视频文件名，去重.
-3.读取所有字幕文件名
+1.执行时获取命令行参数 视频路径和字幕路径
+2.读取所有视频文件
+3.读取所有字幕文件
 4.列出有字幕的文件
-	1.从英文开始读取，到其他字符结束，为番号头
-	2.读取任意字符(空或其他字符)，读取到数字，在从数字开始读取到其他任意字符结束，为番号编号
+	1.提取视频和字幕的番号，分为 番号前缀（例如ipx）和番号后缀（例如909,番号后缀统一去除所有开头的0，例如005.只记录5）
+	2.不区分大小写比较番号对象
 
 
 */
@@ -39,6 +39,12 @@ type no struct {
 	pre string
 	suf string
 }
+
+const (
+	FC2 = "fc2"
+	FC2LEN = 3
+	ZERO = "0"
+)
 
 
 func main() {
@@ -107,7 +113,7 @@ func main() {
 	// 比较
 	for _, av := range avFileN {
 		for _,sub := range subFileN {
-			if av == sub{
+			if strings.EqualFold(av.pre,sub.pre) && strings.EqualFold(av.suf,sub.suf){
 				fmt.Println(av.pre +"-" +av.suf)
 				break
 			}
@@ -143,6 +149,11 @@ func getAllFileName(dirPath string)(fileNames []string,err error){
 	fileInfo,err := ioutil.ReadDir(dirPath)
 	for _,i := range fileInfo{
 		if i.IsDir(){
+
+			if i.Name() == "System Volume Information"{
+				continue
+			}
+
 			temp,err := getAllFileName(dirPath + string(os.PathSeparator) + i.Name())
 			if err != nil {
 				panic(errors.New("目录读取异常:" + err.Error()))
@@ -157,9 +168,10 @@ func getAllFileName(dirPath string)(fileNames []string,err error){
 }
 
 /**判断一个文件是否是视频文件*/
+var isAVReg = regexp.MustCompile("\\.[\\w]+$")
 func isAV(name string)bool{
-	reg := regexp.MustCompile("\\.[\\w]+$")
-	suf := reg.FindString(name)
+
+	suf := isAVReg.FindString(name)
 	for _,temp := range avSuf{
 		if strings.EqualFold(temp,suf){
 			return true
@@ -169,9 +181,9 @@ func isAV(name string)bool{
 }
 
 /**判断一个文件是否是字幕文件*/
+var isSubReg = regexp.MustCompile("\\.[\\w]+$")
 func isSub(name string)bool{
-	reg := regexp.MustCompile("\\.[\\w]+$")
-	suf := reg.FindString(name)
+	suf := isSubReg.FindString(name)
 	for _,temp := range subSuf{
 		if strings.EqualFold(temp,suf){
 			return true
@@ -184,11 +196,13 @@ func isSub(name string)bool{
 
 /**提取番号
 所有番号 [\\w]+.?[\\d]+
-前缀
-后缀
 */
+var getNOReg = regexp.MustCompile("^[A-Za-z]+|[\\d]+")
 func getNO(name string)(n no){
-	reg := regexp.MustCompile("^[A-Za-z]+|[\\d]+")
-	temp := reg.FindAllString(name,2)
-	return no{temp[0], temp[1]}
+	temp := getNOReg.FindAllString(name,2)
+	// 格式错误，直接返回空对象
+	if len(temp) < 2 {
+		return no{"",""}
+	}
+	return no{temp[0], strings.TrimLeft(temp[1],ZERO)}
 }
