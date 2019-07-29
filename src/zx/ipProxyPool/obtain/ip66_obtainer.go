@@ -12,7 +12,11 @@ import (
 /**
 	66普通
 	http://www.66ip.cn/mo.php?tqsl=100
+
+
  */
+// Deprecated
+
 
 type Ip66CommonObtainer struct {
 	*WebObtainer

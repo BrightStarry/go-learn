@@ -78,8 +78,6 @@ type SystemConfig struct {
 	VerifierTimeout time.Duration
 	// 校验器并发数
 	VerifierThreadNum int
-	// 校验通过通道缓冲数
-	//VerifiedChanBufNum int
 	// ip重校验间隔
 	ReVerifyInterval time.Duration
 	// ip重校验线程数
@@ -104,8 +102,6 @@ func InitSystemConfig() {
 		VerifierTimeout: 10 * time.Second,
 		// 校验器并发数
 		VerifierThreadNum: 64,
-		// 校验通过通道缓冲数
-		//VerifiedChanBufNum: 32,
 		// 入库ip重新校验间隔
 		ReVerifyInterval: 10 * time.Minute,
 		// ip重校验线程数

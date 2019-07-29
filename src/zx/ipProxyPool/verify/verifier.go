@@ -34,8 +34,8 @@ var httpVerifyUrls = []verifyUrl{
 	https校验网站
  */
 var httpsVerifyUrls = []verifyUrl{
-	{url:"https://example.com/",selector:"head > title",value:"Example Domain"},
-	//{url:"https://www.baidu.com/",selector:"head > title",value:"百度一下，你就知道"},
+	//{url:"https://example.com/",selector:"head > title",value:"Example Domain"},
+	{url:"https://www.baidu.com/",selector:"head > title",value:"百度一下，你就知道"},
 }
 
 /**
@@ -48,10 +48,10 @@ var httpsVerifyUrls = []verifyUrl{
 const(
 	// 默认
 	level0 = iota
-	// 通过格式
+	// 通过格式校验
 	level1
-	// 通过http
-	level2
+	// 通过http, 取消http校验
+	//level2
 	// 通过https
 	level3
 	// 通过翻墙
@@ -63,7 +63,7 @@ const(
   */
  var verifyMethods = [...]func(*config.ProxyIp)error{
 	 verifyFormat,
-	 verifyHttp,
+	 //verifyHttp,
 	 verifyHttps,
 	 verifyJump,
  }
@@ -116,8 +116,8 @@ func Verify(proxyIp *config.ProxyIp) {
 		if p := recover(); p != nil{
 			//fmt.Println("校验异常:",p)
 		}
-		// 只要实现了http,就加入通道
-		if l >= level2 {
+		// 实现了https,加入通道
+		if l >= level3 {
 			config.VerifiedChan <- proxyIp
 		}
 	}()
@@ -164,12 +164,17 @@ func verifyHttp(proxyIp *config.ProxyIp) error{
 	https校验
  */
 func verifyHttps(proxyIp *config.ProxyIp)error {
+	start := time.Now()
 	response :=util.GetByProxy(httpsVerifyUrls[0].url,proxyIp.Url)
+	elapsed := time.Since(start)
 	document := util.ResponseToDocument(response)
 	value:= util.GetTextBySelector(document, httpsVerifyUrls[0].selector)
 	if value != httpsVerifyUrls[0].value{
 		return errors.New("https校验失败")
 	}
+	// 记录验证时间和延迟
+	proxyIp.LastVerifyTime = start
+	proxyIp.Delay = elapsed
 	proxyIp.Protocol = config.HttpsFlag
 	return nil
 }
@@ -178,12 +183,17 @@ func verifyHttps(proxyIp *config.ProxyIp)error {
 	翻墙校验
  */
 func verifyJump(proxyIp *config.ProxyIp) error{
+	start := time.Now()
 	response :=util.GetByProxy(jumpVerifyUrls[0].url,proxyIp.Url)
+	elapsed := time.Since(start)
 	document := util.ResponseToDocument(response)
 	value:= util.GetTextBySelector(document, jumpVerifyUrls[0].selector)
 	if value != jumpVerifyUrls[0].value{
 		return errors.New("翻墙校验失败")
 	}
+	// 记录验证时间和延迟
+	proxyIp.LastVerifyTime = start
+	proxyIp.Delay = elapsed
 	proxyIp.IsJump = true
 	return nil
 }

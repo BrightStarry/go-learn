@@ -72,6 +72,7 @@ set GOOS=windows
 
 也可以直接如下，构建出linux的执行文件
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build HTTPServer.go
+
 ~~~
 
 

@@ -3,22 +3,22 @@ package main
 import (
 	"flag"
 	"io/ioutil"
-	"fmt"
 	"os"
 	"strings"
 	"regexp"
-	"strconv"
 	"errors"
+	"fmt"
+	"strconv"
 )
 
 /*
 搜索思路：
-1.从配置文件读取字幕路径和视频路径，视频路径默认为空，如果为空，则要在运行后输入视频地址。
-2.读取视频文件名，去重.
-3.读取所有字幕文件名
+1.执行时获取命令行参数 视频路径和字幕路径
+2.读取所有视频文件
+3.读取所有字幕文件
 4.列出有字幕的文件
-	1.从英文开始读取，到其他字符结束，为番号头
-	2.读取任意字符(空或其他字符)，读取到数字，在从数字开始读取到其他任意字符结束，为番号编号
+	1.提取视频和字幕的番号，分为 番号前缀（例如ipx）和番号后缀（例如909,番号后缀统一去除所有开头的0，例如005.只记录5）
+	2.不区分大小写比较番号对象
 
 
 */
@@ -38,7 +38,28 @@ var subSuf = []string{".SSA",".ASS",".SMI",".SRT",".SUB",".LRC",".SST",".vtt"}
 type no struct {
 	pre string
 	suf string
+	isExist bool
 }
+/*no对象比较*/
+func (s *no) equals(other *no)bool{
+	if strings.EqualFold(s.pre,other.pre) && strings.EqualFold(s.suf,other.suf) {
+		return true
+	}
+	return false
+}
+/*no对象判断是否为空*/
+func (s *no) isNull() bool{
+	if s == nil || s.pre == ""  || s.suf == "" {
+		return true
+	}
+	return false
+}
+const (
+	FC2 = "FC2"
+	fc2="fc2"
+	FLAG = " 中字 "
+	ZERO = "0"
+)
 
 
 func main() {
@@ -69,6 +90,7 @@ func main() {
 
 	// 提取视频文件
 	for i:=0;i<len(avFiles);{
+		// 不是视频文件，从分片中删除
 		if !isAV(avFiles[i]) {
 			avFiles = append(avFiles[:i],avFiles[i+1:]...)
 		}else{
@@ -100,27 +122,27 @@ func main() {
 	// 获取字幕番号
 	subFileN :=  make([]no,len(subFiles))
 	for i,temp := range subFiles {
-		subFileN[i] = getNO(temp)
+		subFileN[i] =getNO(temp)
 	}
 
 	fmt.Println("以下为有字幕视频:")
 	// 比较
 	for _, av := range avFileN {
+		// no为空时退出该次比较
+		if av.isNull(){
+			continue
+		}
 		for _,sub := range subFileN {
-			if av == sub{
-				fmt.Println(av.pre +"-" +av.suf)
+			if av.equals(&sub){
+				if av.isExist{
+					fmt.Println(av.pre +"-" +av.suf + "\t")
+				}else{
+					fmt.Println(av.pre +"-" +av.suf + "\t" + "未包含中字")
+				}
 				break
 			}
 		}
 	}
-
-
-
-
-
-
-
-
 
 
 
@@ -143,6 +165,11 @@ func getAllFileName(dirPath string)(fileNames []string,err error){
 	fileInfo,err := ioutil.ReadDir(dirPath)
 	for _,i := range fileInfo{
 		if i.IsDir(){
+
+			if i.Name() == "System Volume Information"{
+				continue
+			}
+
 			temp,err := getAllFileName(dirPath + string(os.PathSeparator) + i.Name())
 			if err != nil {
 				panic(errors.New("目录读取异常:" + err.Error()))
@@ -157,9 +184,10 @@ func getAllFileName(dirPath string)(fileNames []string,err error){
 }
 
 /**判断一个文件是否是视频文件*/
+var isAVReg = regexp.MustCompile("\\.[\\w]+$")
 func isAV(name string)bool{
-	reg := regexp.MustCompile("\\.[\\w]+$")
-	suf := reg.FindString(name)
+
+	suf := isAVReg.FindString(name)
 	for _,temp := range avSuf{
 		if strings.EqualFold(temp,suf){
 			return true
@@ -169,9 +197,9 @@ func isAV(name string)bool{
 }
 
 /**判断一个文件是否是字幕文件*/
+var isSubReg = regexp.MustCompile("\\.[\\w]+$")
 func isSub(name string)bool{
-	reg := regexp.MustCompile("\\.[\\w]+$")
-	suf := reg.FindString(name)
+	suf := isSubReg.FindString(name)
 	for _,temp := range subSuf{
 		if strings.EqualFold(temp,suf){
 			return true
@@ -184,11 +212,29 @@ func isSub(name string)bool{
 
 /**提取番号
 所有番号 [\\w]+.?[\\d]+
-前缀
-后缀
+^[A-Za-z]+|[\\d]+
 */
+var getNOReg = regexp.MustCompile("^([A-Za-z]+|[\\d]+)[-_]?([\\d]+)")
+var getNORegFC2 = regexp.MustCompile("[\\d]{4,}")
+
 func getNO(name string)(n no){
-	reg := regexp.MustCompile("^[A-Za-z]+|[\\d]+")
-	temp := reg.FindAllString(name,2)
-	return no{temp[0], temp[1]}
+	// 处理fc2番号
+	if strings.HasPrefix(name,FC2) || strings.HasPrefix(name,fc2){
+		temp := getNORegFC2.FindAllString(name,1)
+		// 格式错误，直接返回空对象
+		if len(temp) < 1{
+			fmt.Println("格式错误:" +name)
+			return
+		}
+		return no{FC2, strings.TrimLeft(temp[0],ZERO),strings.Contains(name,FLAG)}
+	}
+
+	// 处理其他番号
+	temp := getNOReg.FindStringSubmatch(name)
+	// 格式错误，直接返回空对象
+	if len(temp) < 3 {
+		fmt.Println("格式错误:" +name)
+		return
+	}
+	return no{temp[1], strings.TrimLeft(temp[2],ZERO),strings.Contains(name,FLAG)}
 }

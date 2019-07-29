@@ -20,6 +20,8 @@ func SyncStartWebServer() {
 	// 监控器
 	http.HandleFunc("/monitor", errWrapper(monitorHandler))
 	http.HandleFunc("/get", errWrapper(getIpHandler))
+	http.HandleFunc("/cancel", errWrapper(cancelProxyHandler))
+	http.HandleFunc("/set", errWrapper(setProxyHandler))
 	if err := http.ListenAndServe(":"+config.Config.WebPort, nil); err != nil {
 		log.Panicln("web服务异常:", err)
 	}
@@ -64,7 +66,6 @@ func getIpHandler(w http.ResponseWriter, r *http.Request) error {
 	}
 	// 根据延迟从小到大排序
 	ips = util.Sort(ips, len(ips))[:length]
-
 	// 如果只需要翻墙服务器
 	if isJump == "1"{
 		var tempIps []*config.ProxyIp
@@ -75,6 +76,7 @@ func getIpHandler(w http.ResponseWriter, r *http.Request) error {
 		}
 		ips = tempIps
 	}
+
 
 	var result []*config.IpDTO
 	var p string
@@ -95,6 +97,57 @@ func getIpHandler(w http.ResponseWriter, r *http.Request) error {
 
 	bytes, _ := json.Marshal(result)
 	w.Write(bytes)
+	return nil
+}
+
+/**
+	取消代理
+ */
+func cancelProxyHandler(w http.ResponseWriter, r *http.Request) error {
+	util.CancelProxy()
+	w.Write( []byte("true"))
+	return nil
+}
+
+/**
+设置代理
+ */
+func setProxyHandler(w http.ResponseWriter, r *http.Request) error {
+	r.ParseForm()
+	l := r.Form.Get("rank")
+	rank, err := strconv.Atoi(l)
+	// 如果len为nil或格式有误，默认为0
+	if err != nil {
+		rank = 0
+	}
+	isJump := r.Form.Get("isJump")
+
+	// 获取ip
+	//ips := store.GetIpsAtLast(length)
+	ips := config.ProxyIpStore.Queue[:]
+
+	// 根据延迟从小到大排序
+	ips = util.Sort(ips, len(ips))[:]
+	// 如果只需要翻墙服务器
+	if isJump == "1"{
+		var tempIps []*config.ProxyIp
+		for _,v:= range ips{
+			if v.IsJump{
+				tempIps = append(tempIps, v)
+			}
+		}
+		ips = tempIps
+	}
+	if rank >= len(ips){
+		rank = len(ips)-1
+	}
+	if len(ips) == 0{
+		w.Write( []byte("false 暂无可翻墙服务器"))
+	} else{
+	//设置代理
+	util.SetProxy(ips[rank].Url)
+	w.Write( []byte("true " + ips[rank].Url.Host))
+	}
 	return nil
 }
 
@@ -158,3 +211,5 @@ func (this ServiceError) Error() string {
 func (this ServiceError) Message() string {
 	return string(this)
 }
+
+

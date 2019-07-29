@@ -22,6 +22,21 @@ func TestAutoConfigPAC(t *testing.T) {
 }
 
 /**
+	测试自动配置代理服务器
+ */
+func TestAutoConfigProxy(t *testing.T) {
+	cmd := exec.Command("reg","add","HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
+		"/v","ProxyEnable", "/t","REG_SZ", "/d","1", "/f")
+	cmd.Run()
+
+	cmd2 := exec.Command("reg","add","HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
+		"/v","ProxyServer", "/t","REG_SZ", "/d","192.168.0.1:8088", "/f")
+	cmd2.Run()
+	cmd3 := exec.Command("ipconfig","/flushdns")
+	cmd3.Run()
+}
+
+/**
 	测试启动web服务，返回pac脚本
  */
 func TestWeb(t *testing.T) {
