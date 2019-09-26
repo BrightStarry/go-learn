@@ -3545,8 +3545,8 @@ func TestCheckValidHTTP2Request(t *testing.T) {
 			want: errors.New(`request header "Connection" is not valid in HTTP/2`),
 		},
 		{
-			h:    http.Header{"Proxy-Connection": {""}},
-			want: errors.New(`request header "Proxy-Connection" is not valid in HTTP/2`),
+			h:    http.Header{"Pattern-Connection": {""}},
+			want: errors.New(`request header "Pattern-Connection" is not valid in HTTP/2`),
 		},
 		{
 			h:    http.Header{"Keep-Alive": {""}},

@@ -45,6 +45,8 @@ func SetProxy(url *url.URL){
  刷新代理
   */
  func flushProxy(){
-	 //cmd := exec.Command("gpupdate","/force")
-	 //cmd.Run()
+	 cmd := exec.Command("taskkill","/f","/im","explorer.exe")
+	 cmd.Run()
+	 cmd2 := exec.Command("explorer.exe")
+	 cmd2.Start()
  }

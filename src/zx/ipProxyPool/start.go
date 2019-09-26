@@ -9,7 +9,6 @@ import (
 	"zx/ipProxyPool/web"
 	"zx/ipProxyPool/config"
 	"flag"
-	"fmt"
 )
 
 /**
@@ -22,7 +21,7 @@ func main() {
 	// 获取外部参数,修改默认系统参数
 	importExtParam()
 
-	fmt.Println("参数:",config.Config)
+	log.Println("参数:",config.Config)
 
 	// 配置初始化
 	config.Init()
@@ -113,7 +112,7 @@ func startObtainerIncrementTicker() {
 			// 创建定时通道
 			c := time.Tick(val.GetWebObtainer().Interval)
 			// 启动定时器
-			asyncIncrementTicker(&val, &c)
+			asyncIncrementTicker(val, &c)
 		}(v)
 	}
 }
@@ -121,20 +120,20 @@ func startObtainerIncrementTicker() {
 /**
 	增量获取定时器
  */
-func asyncIncrementTicker(o *obtain.Obtainer, c *<-chan time.Time) {
+func asyncIncrementTicker(o obtain.Obtainer, c *<-chan time.Time) {
 	// 每当收到信号
 	go func() {
-		for tick := range *c {
+		for  range *c {
 			func() {
 				// 进行异常捕获
 				defer func() {
 					if err := recover(); err != nil {
-						log.Println((*o).GetWebObtainer().Name, " 增量获取失败:", err)
+						log.Println(o.GetWebObtainer().Name, " 增量获取失败:", err)
 					}
 				}()
-				log.Println((*o).GetWebObtainer().Name, " 进行增量获取:", tick)
-				length := (*o).IncrementObtain()
-				log.Println((*o).GetWebObtainer().Name, " 增量获取数:", length)
+				log.Println(o.GetWebObtainer().Name, " 进行增量获取")
+				length := o.IncrementObtain()
+				log.Println(o.GetWebObtainer().Name, " 增量获取数:", length)
 			}()
 		}
 	}()

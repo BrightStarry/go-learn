@@ -31,7 +31,7 @@ func TestHttpClient(t *testing.T) {
 	urlProxy,_ := url.Parse("http://127.0.0.1:8080")
 	//proxyClient := &http.Client{
 	//	Transport: &http.Transport{
-	//		Proxy:http.ProxyURL(urlProxy),
+	//		Pattern:http.ProxyURL(urlProxy),
 	//	},
 	//}
 	fmt.Println(urlProxy)

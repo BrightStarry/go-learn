@@ -1,0 +1,8 @@
+# m3u8和key文件保存目录
+downloadDir:  C:\h\新建文件夹
+# txt文件路径
+txtDir: C:\Users\97038\Documents\Tencent Files\2185247268\FileRecv\新建文本文档 (3).txt
+#代理url 例如使用本地socks5代理，端口为1081,则为 socks5://127.0.0.1:1081 ，为"",则不使用代理
+proxyURL:
+# key文件最终目录，即需要将key放到该目录下，m3u8文件才可以关联到
+keyDir: C:\h\av2\m3u8\众筹

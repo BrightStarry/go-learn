@@ -142,11 +142,18 @@ func setProxyHandler(w http.ResponseWriter, r *http.Request) error {
 		rank = len(ips)-1
 	}
 	if len(ips) == 0{
-		w.Write( []byte("false 暂无可翻墙服务器"))
+		w.Write( []byte("false 暂无可用服务器"))
 	} else{
 	//设置代理
 	util.SetProxy(ips[rank].Url)
-	w.Write( []byte("true " + ips[rank].Url.Host))
+	//w.Write( []byte("true " + ips[rank].Url.Host))
+		bytes, _ := json.Marshal( config.IpDTO{
+			Host:           ips[rank].Url.Host,
+			LastVerifyTime: ips[rank].LastVerifyTime,
+			Delay:          ips[rank].Delay.Seconds(),
+			IsJump:         ips[rank].IsJump,
+		})
+		w.Write(bytes)
 	}
 	return nil
 }

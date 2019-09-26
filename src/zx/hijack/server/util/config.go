@@ -8,6 +8,8 @@ import "fmt"
 type Configuration struct{
 	// 端口
 	Port string
+	// 数据存储路径
+	DataPath string
 	// pac文件路径
 	PacPath string
 }
@@ -26,6 +28,7 @@ func NewDefaultConfig() *Configuration {
 	return &Configuration{
 		Port: "9000",
 		//PacPath:"C:\\code\\goSpace\\go-learn\\src\\zx\\hijack\\resources\\test.pac",
-		PacPath:"./test.pac",
+		PacPath: "./test.pac",
+		DataPath: "./",
 	}
 }

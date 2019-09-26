@@ -36,6 +36,9 @@ func Get(url string) (response *http.Response){
 	if err != nil {
 		panic(errors.New("url:" + url + " 请求异常:"+err.Error()))
 	}
+	if response.StatusCode != http.StatusOK{
+		panic(errors.New("url:" + url + " 请求异常:"+response.Status))
+	}
 	return
 }
 

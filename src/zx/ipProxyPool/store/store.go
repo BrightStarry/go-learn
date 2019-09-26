@@ -18,7 +18,7 @@ import (
 func StartStorage() {
 	go func() {
 		for ip := range config.VerifiedChan {
-			log.Println("入库:", ip)
+			//log.Println("入库:", ip)
 			put(ip)
 		}
 	}()

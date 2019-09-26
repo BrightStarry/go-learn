@@ -37,6 +37,21 @@ func TestAutoConfigProxy(t *testing.T) {
 }
 
 /**
+测试重启资源管理器，让http代理服务器生效
+taskkill /f /im explorer.exe & start explorer.exe
+
+ */
+func TestRestarResourceMaster(t *testing.T)  {
+	cmd := exec.Command("taskkill","/f","/im","explorer.exe")
+	cmd.Run()
+
+	cmd2 := exec.Command("explorer.exe")
+	cmd2.Start()
+
+
+}
+
+/**
 	测试启动web服务，返回pac脚本
  */
 func TestWeb(t *testing.T) {

@@ -6,6 +6,8 @@ import (
 	"sync"
 	"fmt"
 	"net/url"
+	"net/http/cookiejar"
+	"log"
 )
 
 /**
@@ -99,13 +101,13 @@ func InitSystemConfig() {
 		// 爬虫超时时间
 		SpiderTimeout: 15 * time.Second,
 		// 校验器超时时间
-		VerifierTimeout: 10 * time.Second,
+		VerifierTimeout: 5 * time.Second,
 		// 校验器并发数
-		VerifierThreadNum: 64,
+		VerifierThreadNum: 128,
 		// 入库ip重新校验间隔
-		ReVerifyInterval: 10 * time.Minute,
+		ReVerifyInterval: 5 * time.Minute,
 		// ip重校验线程数
-		ReVerifyThreadNum: 64,
+		ReVerifyThreadNum: 16,
 	}
 }
 
@@ -116,12 +118,12 @@ func InitDefaultClient() {
 	DefaultClient = &http.Client{}
 	// 超时时间
 	DefaultClient.Timeout = Config.SpiderTimeout
-	// 构建cookie  暂不构建cookie
-	//cookie, err := cookiejar.New(nil)
-	//if err != nil {
-	//	log.Fatalln("构建cookie失败:", err)
-	//}
-	//DefaultClient.Jar = cookie
+	// 构建cookie
+	cookie, err := cookiejar.New(nil)
+	if err != nil {
+		log.Fatalln("构建cookie失败:", err)
+	}
+	DefaultClient.Jar = cookie
 }
 
 /**
@@ -139,11 +141,16 @@ func InitVerifierClient() {
 
 /**
 	初始化默认请求头
+    Windows
+
+Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0
+Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/535.1 (KHTML, like Gecko) Chrome/14.0.835.163 Safari/535.1
+Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)
  */
 func InitDefaultHeader() {
 	// 设置默认请求头
 	DefaultHeader = &map[string][]string{
-		"User-Agent":                {"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/64.0.3282.140 Safari/537.36"},
+		"User-Agent":                {"Mozilla/5.0 (Windows NT 6.1; WOW64; rv:6.0) Gecko/20100101 Firefox/6.0"},
 		"Accept":                    {"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"},
 		"Connection":                {"keep-alive"},
 		"Accept-Encoding":           {"gzip, deflate"},
@@ -180,6 +187,11 @@ const(
 	Ip89
 )
 
+//其他
+const(
+	HttpStatusSpiderBad = 521
+)
+
 /**
 	代理ip
  */
@@ -196,7 +208,7 @@ type ProxyIp struct {
 	IsJump bool
 	// 类型,普通:0  匿名:1
 	Type uint8
-	// 来自
+	// 来自哪个网站
 	From uint8
 }
 
