@@ -314,7 +314,7 @@ func TestDecodeMediaPlaylist(t *testing.T) {
 		t.Errorf("TargetDuration of parsed playlist = %f (must = 12.0)", p.TargetDuration)
 	}
 	if !p.Closed {
-		t.Error("This is a closed (VOD) playlist but Close field = false")
+		t.Error("This is a closed (VOD) playlist but CloseQueue field = false")
 	}
 	titles := []string{"Title 1", "Title 2", ""}
 	for i, s := range p.Segments {
@@ -456,7 +456,7 @@ func TestDecodeMediaPlaylistWithAutodetection(t *testing.T) {
 	}
 
 	if !pp.Closed {
-		t.Error("This is a closed (VOD) playlist but Close field = false")
+		t.Error("This is a closed (VOD) playlist but CloseQueue field = false")
 	}
 	if pp.winsize != 0 {
 		t.Errorf("Media window size %v != 0", pp.winsize)

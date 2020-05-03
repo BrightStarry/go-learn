@@ -1,6 +1,6 @@
 # 存储key的目录
 keyDir: C:\h\av2\m3u8\all
 # 根目录
-rootDir: E:\process\
+rootDir: E:\process
 # 是否转码(0:不转，其他都转)
 isTranscoding: 1

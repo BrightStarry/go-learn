@@ -1,0 +1,10 @@
+# key和value之前要空一格,例如 WmvSaveDir: d:\    冒号后面空一格
+
+# wmv保存目录。 例如 C:\  则名字为abp003.wmv的wmv文件会保存为 c:\abp003\abp003.wmv
+WmvSaveDir:
+
+# 生成的hds文件路径
+NewHdsFilePath:
+
+# 初始证书路径
+OldHdsFilePath:

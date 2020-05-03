@@ -50,25 +50,32 @@ func (threadPool *ThreadPool) Start() error{
 // 单个任务， 任务id
 func (threadPool *ThreadPool) run(threadId int) {
 	for job := range threadPool.Queue{
-		defer func() {
-			if err := recover(); err != nil{
-				myLog.Info("threadId:%d,queueId:%d,error:%v",threadId,job.Id,err)
-				threadPool.Result <-Result{false,"未知异常.",job.FuncArgs}
-			}
-		}()
-		myLog.Info("threadId:%d,queueId:%d,start.",threadId,job.Id)
-		// 执行
-		err := threadPool.RunFunc(job.FuncArgs)
-		// 失败
-		if err != nil {
-			myLog.Info("threadId:%d,queueId:%d,error:%v",threadId,job.Id,err)
-			threadPool.Result <- Result{false,err.Error(),job.FuncArgs}
-			break
-		}
-		// 成功
-		myLog.Info("threadId:%d,queueId:%d,success.",threadId,job.Id)
-		threadPool.Result <- Result{true,SUCCESS,job.FuncArgs}
+		threadPool.run1(threadId,job)
 	}
+}
+
+/**
+单个任务，内循环
+ */
+func (threadPool *ThreadPool) run1(threadId int,job *Job) {
+	defer func() {
+		if err := recover(); err != nil{
+			myLog.Info("threadId:%d,queueId:%d,error:%v",threadId,job.Id,err)
+			threadPool.Result <-Result{false,"未知异常.",job.FuncArgs}
+		}
+	}()
+	myLog.Info("threadId:%d,queueId:%d,start.",threadId,job.Id)
+	// 执行
+	err := threadPool.RunFunc(job.FuncArgs)
+	// 失败
+	if err != nil {
+		myLog.Info("threadId:%d,queueId:%d,error:%v",threadId,job.Id,err)
+		threadPool.Result <- Result{false,err.Error(),job.FuncArgs}
+		return
+	}
+	// 成功
+	myLog.Info("threadId:%d,queueId:%d,success.",threadId,job.Id)
+	threadPool.Result <- Result{true,SUCCESS,job.FuncArgs}
 }
 
 // 任务入队
@@ -82,9 +89,10 @@ func (threadPool *ThreadPool) Take() Result {
 }
 
 // 关闭队列
-func (threadPool *ThreadPool) Close()  {
+func (threadPool *ThreadPool) CloseQueue()  {
 	close(threadPool.Queue)
 }
+
 // 任务
 type Job struct{
 	// id

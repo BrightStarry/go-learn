@@ -727,7 +727,7 @@ func (p *MediaPlaylist) Count() uint {
 	return p.count
 }
 
-// Close sliding playlist and make them fixed.
+// CloseQueue sliding playlist and make them fixed.
 func (p *MediaPlaylist) Close() {
 	if p.buf.Len() > 0 {
 		p.buf.WriteString("#EXT-X-ENDLIST\n")

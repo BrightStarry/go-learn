@@ -49,7 +49,7 @@ func NewUDPClient(conf UDPConfig) (Client, error) {
 	}, nil
 }
 
-// Close releases the udpclient's resources.
+// CloseQueue releases the udpclient's resources.
 func (uc *udpclient) Close() error {
 	return uc.conn.Close()
 }

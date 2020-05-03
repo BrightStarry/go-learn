@@ -78,7 +78,7 @@ type Client interface {
 	// the UDP client.
 	Query(q Query) (*Response, error)
 
-	// Close releases any resources a Client may be using.
+	// CloseQueue releases any resources a Client may be using.
 	Close() error
 }
 
@@ -165,7 +165,7 @@ func (c *client) Ping(timeout time.Duration) (time.Duration, string, error) {
 	return time.Since(now), version, nil
 }
 
-// Close releases the client's resources.
+// CloseQueue releases the client's resources.
 func (c *client) Close() error {
 	c.transport.CloseIdleConnections()
 	return nil
@@ -487,7 +487,7 @@ type Message struct {
 	Text  string
 }
 
-// Result represents a resultset returned from a single statement.
+// ResultQueue represents a resultset returned from a single statement.
 type Result struct {
 	Series   []models.Row
 	Messages []*Message

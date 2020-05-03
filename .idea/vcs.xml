@@ -2,7 +2,60 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/Code-Hex/pget" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/Code-Hex/updater" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/FiloSottile/mkcert" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/StackExchange/wmi" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/Unknwon/com" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/Unknwon/goconfig" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/VividCortex/ewma" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/alvatar/multipart-downloader" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/antonholmquist/jason" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/asaskevich/govalidator" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/axgle/mahonia" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/cavaliercoder/grab" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/derekparker/delve" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/fsnotify/fsnotify" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/go-delve/delve" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/go-ole/go-ole" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/golang/crypto" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/gorilla/websocket" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/gpmgo/gopm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/hashicorp/go-cleanhttp" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/hashicorp/hcl" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/jessevdk/go-flags" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/konsorten/go-windows-terminal-sequences" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/lxn/win" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/magiconair/properties" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/mattn/go-runewidth" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/mcuadros/go-version" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/mitchellh/mapstructure" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/parnurzeal/gorequest" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/pelletier/go-toml" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/ricochet2200/go-disk-usage" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/robertkrimen/otto" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/robotn/gohook" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/shirou/gopsutil" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/shirou/w32" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/sirupsen/logrus" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/spf13/afero" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/spf13/cast" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/spf13/jwalterweatherman" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/spf13/pflag" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/spf13/viper" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/subosito/gotenv" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vbauerster/backoff" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vbauerster/getparty" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vbauerster/mpb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vcaesar/gops" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/vcaesar/imgo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/github.com/zyxar/argo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/golang.org/x/crypto" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/golang.org/x/net" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/golang.org/x/sys" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/golang.org/x/text" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/gopkg.in/cheggaaa/pb.v1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/gopkg.in/sourcemap.v1" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/gopkg.in/yaml.v2" vcs="Git" />
   </component>
 </project>

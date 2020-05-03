@@ -44,7 +44,7 @@ func handlerClientRequest(client net.Conn) {
 	if client == nil {
 		return
 	}
-	//defer client.Close()
+	//defer client.CloseQueue()
 
 	client.SetDeadline(time.Now().Add(time.Duration(30) * time.Second))
 

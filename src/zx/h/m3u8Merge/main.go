@@ -37,11 +37,13 @@ func main() {
 	// key目录
 	keyDir = viper.GetString("keyDir")
 	// 获取rootTSDir
-	rootDir = viper.GetString("rootDir")
-	rootTsDir = rootDir + "ts\\"
-	resultDir = rootDir +"result\\"
+	rootDir = viper.GetString("rootDir") + string(os.PathSeparator)
+	rootTsDir = rootDir + "ts"+string(os.PathSeparator)
+	resultDir = rootDir +"result" +string(os.PathSeparator)
 	// 是否转码
 	isTranscoding := viper.GetString("isTranscoding")
+	// 线程数
+	//threadNum := viper.GetInt("threadNum")
 
 	tsDirs,err := util.GetFileName(rootTsDir)
 	if err != nil {
@@ -57,14 +59,16 @@ func main() {
 		// 番号
 		number :=filepath.Base(tsDir)
 		// 解密后输出路径
-		outPath := rootTsDir+number +"-out"+string(os.PathSeparator)
-		// 解密
-		decrypt(tsDir,outPath)
-		// 合并
-		merge(outPath)
+		//outPath := rootTsDir+number +"-out"+string(os.PathSeparator)
+		//// 解密
+		//decrypt(tsDir,outPath,threadNum)
+		//// 合并
+		//merge(outPath)
+		tsOutPath := resultDir + number +".ts"
+		decryptAndMerge(tsDir,tsOutPath)
 		if isTranscoding != "0" {
 			// 转码
-			transcodingAndRemoveTemp(number,outPath)
+			transcodingAndRemoveTemp(number,tsOutPath)
 		}
 
 
@@ -74,24 +78,97 @@ func main() {
 }
 
 /**
+解密 并合并
+ */
+ func decryptAndMerge(dir,outPath string) {
+	 myLog.Info("开始解密合并." )
+	 // 获取ts文件名
+	 filePaths := util.GetAllFileName(dir)
+	 filePaths = shellSort(filePaths)// 排序
+	 // 读取key
+	 keyFilePath := keyDir +string(os.PathSeparator) +filepath.Base(dir) + ".key"
+	 keyBytes,err := ioutil.ReadFile(keyFilePath)
+	 if err!= nil {
+		 panic("读取key异常：" + err.Error())
+	 }
+	 outFile, err := os.OpenFile(outPath, os.O_RDWR|os.O_CREATE|os.O_TRUNC,0644)
+	 defer outFile.Close()
+	 if err != nil {
+		 panic("创建文件异常:" + err.Error())
+	 }
+
+	 bytesChannel := make(chan []byte,32)
+	 go func() {
+		 for _,item := range filePaths {
+			 tempBytes,err := ioutil.ReadFile(item)
+			 if err != nil {
+				 panic("解密合并异常:" + err.Error())
+			 }
+			 bytesChannel <- tempBytes
+		 }
+		 close(bytesChannel)
+	 }()
+
+	 var allBytes []byte
+	 i:=1
+	 for tempBytes:= range bytesChannel {
+		 tempBytes = util.AESDecrypt(tempBytes,keyBytes)
+		 allBytes = append(allBytes, tempBytes...)
+		 // 每x个文件，或最后一个文件 ，全部写入
+		 if i % 64== 0 || i == len(filePaths){
+			 _,err = outFile.Write(allBytes)
+			 if err != nil {
+				 panic("解密合并异常:" + err.Error())
+			 }
+			 allBytes = []byte{}
+			 myLog.Info("处理中...")
+		 }
+		 i++
+	 }
+
+	 myLog.Info("解密合并成功" )
+	 // 成功则删除该文件夹
+	 if err =os.RemoveAll(dir); err != nil {
+		 myLog.Error("删除文件夹失败:%v",err)
+	 }
+ }
+
+/**
+不转码时，把result.ts移动到result目录，并删除out文件夹
+ */
+ func processNotTranscoding(outPath,number string) {
+ 	movePath := resultDir + number + ".ts"
+	if err :=util.StartCMD("cmd","/c","move",
+		outPath+"result.ts",movePath);err != nil {
+			panic("移动文件失败:"+ err.Error())
+	}
+
+	 if util.FileIsExist(movePath) {//如果ts文件存在
+		 if err := os.RemoveAll(outPath);err != nil {
+			 myLog.Error("删除outPath失败:%v",err)
+		 }
+	 }
+ }
+
+/**
 	转码
-	 */
-func transcodingAndRemoveTemp(number string,outPath string) {
+*/
+func transcodingAndRemoveTemp(number string,tsOutPath string) {
 	myLog.Info("开始转码.")
 
 	vedioPath := resultDir + number +".mp4"
-	util.RunCMD("cmd","/c",
+	util.StartCMD("cmd","/c",
 		"ffmpeg",
-		"-i",outPath+"result.ts",
+		"-i",tsOutPath,
 		"-c","copy",
-		//"-bsf:a","aac_adtstoasc",
+		"-bsf:a","aac_adtstoasc",
 		"-y", vedioPath)
 	myLog.Info("转码成功.")
 
 	// 删除文件
 	if util.FileIsExist(vedioPath) {//如果mp4文件存在
-		if err := os.RemoveAll(outPath);err != nil {
-			myLog.Error("删除outPath失败:%v",err)
+		if err := os.RemoveAll(tsOutPath);err != nil {
+			myLog.Error("删除tsOutPath失败:%v",err)
 		}
 	}
 }
@@ -102,7 +179,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
  func merge(outPath string) {
 
 	 myLog.Info("开始合并.")
-	 util.RunCMD("cmd","/c", "copy","/B",
+	 util.StartCMD("cmd","/c", "copy","/B",
 		 outPath+"*.ts",  outPath+"result.ts")
 
 	 //tempPath := outPath+"temp.ts"
@@ -114,7 +191,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
 		// if i != 0 {
 		//	 tempStr = tempPath + "+" + tempStr
 		// }
-		// util.RunCMD("cmd","/c",
+		// util.StartCMD("cmd","/c",
 		//	 "copy","/B",
 		//	 tempStr,  tempPath)
 	 //}
@@ -132,7 +209,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
 		// tempStr := strings.TrimRight(strings.Join(filePaths[i:i+offset],"+"),"+")
 		// tempPath := outPath+"temp"+ strconv.Itoa(index) +".ts"
 	 //
-		// util.RunCMD("cmd","/c",
+		// util.StartCMD("cmd","/c",
 		// 	 "copy","/B",
 		// 	 tempStr,  tempPath)
 	 //}
@@ -145,7 +222,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
 		// allTempPath += outPath+"temp"+ strconv.Itoa(i) +".ts" + "+"
 	 //}
 	 //allTempPath = strings.TrimSuffix(allTempPath,"+")
-	 //util.RunCMD("cmd","/c", "copy","/B",
+	 //util.StartCMD("cmd","/c", "copy","/B",
 		// allTempPath,  outPath+"result.ts")
 	 //// 成功后删除
 	 //for i:=1; i<=index;i++{
@@ -158,7 +235,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
 
 	//// 以追加模式打开文件，当文件不存在时生成文件
 	//file, err := os.OpenFile(outPath+"result.ts", os.O_RDWR|os.O_CREATE|os.O_TRUNC,0644)
-	//defer file.Close()
+	//defer file.CloseQueue()
 	//if err != nil {
 	//	 panic("合并异常:" + err.Error())
 	//}
@@ -196,7 +273,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
 /**
 解密
  */
- func decrypt(dir string,outPath string) {
+ func decrypt(dir ,outPath string,threadNum int) {
 	 myLog.Info("开始解密." )
 	 // 获取ts文件名
 	 filePaths := util.GetAllFileName(dir)
@@ -215,7 +292,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
 
 	 // 设置线程池
 	 threadPool := util.ThreadPool{}
-	 threadPool.Init(128, func(args []interface{}) error {
+	 threadPool.Init(threadNum, func(args []interface{}) error {
 		 filePath := args[0].(string)
 		 // 读取加密视频
 		 videoBytes,err := ioutil.ReadFile(filePath)
@@ -267,7 +344,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
 		 threadPool.Put(i,[]interface{}{item})
 	 }
 	 // 关闭
-	 threadPool.Close()
+	 threadPool.CloseQueue()
 	 // 等待获取结果
 	 waitGroup.Wait()
 	 // 打结果
@@ -288,7 +365,7 @@ func transcodingAndRemoveTemp(number string,outPath string) {
   */
 func shellSort(arr []string) []string {
 	subFunc := func(s string)(string) {
-		tempArr := strings.Split(s,"_")
+		tempArr := strings.Split(filepath.Base(s),"_")
 		return strings.TrimSuffix(tempArr[2],".ts")
 	}
 

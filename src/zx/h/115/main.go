@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"github.com/parnurzeal/gorequest"
 	"time"
 	"net/http"
@@ -15,6 +14,10 @@ import (
 	"regexp"
 	"github.com/spf13/viper"
 	"sync"
+	"fmt"
+	"encoding/hex"
+	"bytes"
+	"encoding/binary"
 )
 
 
@@ -66,7 +69,7 @@ func main() {
 
 	baseRequest := gorequest.New().
 		AppendHeader("Cookie",cookie).
-		AppendHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/9.2.1").
+		//AppendHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36 115Browser/9.2.1").
 		Retry(3, 0 * time.Second, http.StatusBadRequest, http.StatusInternalServerError)
 
 	resp, body, errs := baseRequest.Clone().
@@ -83,9 +86,15 @@ func main() {
 	if err := json.Unmarshal([]byte(body), &filesMap); err!= nil {
 		panic(err)
 	}
+	errorStr := filesMap["error"].(string)
+	if errorStr != "" {
+		fmt.Println("115响应异常:",errorStr)
+		return
+	}
+
+
 
 	waitGroup := sync.WaitGroup{}
-
 	// data下就是每个文件，遍历
 	for _, i := range filesMap["data"].([]interface{}) {
 		goI := i
@@ -109,8 +118,8 @@ func main() {
 			name = strings.TrimSuffix(name,filepath.Ext(name))
 			oldName := name
 			// 如果包含空格，则跳过
-			if strings.Contains(name, " ") || strings.Contains(name, "-") {
-				myLog.Warn("文件名有空格或-，可能已经重命名:%s" ,name)
+			if strings.Contains(name, " ")  {
+				myLog.Warn("文件名包含空格，可能已经重命名:%s" ,name)
 				return
 			}
 			if isDMM{
@@ -207,3 +216,14 @@ func main() {
 	myLog.Info("done!")
 }
 
+func u2s(form string) (to string, err error) {
+	bs, err := hex.DecodeString(strings.Replace(form, `\u`, ``, -1))
+	if err != nil {
+		return
+	}
+	for i, bl, br, r := 0, len(bs), bytes.NewReader(bs), uint16(0); i < bl; i += 2 {
+		binary.Read(br, binary.BigEndian, &r)
+		to += string(r)
+	}
+	return
+}

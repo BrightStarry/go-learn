@@ -27,6 +27,39 @@ type Data struct {
 	dirname      string
 	fullfilename string
 }
+func Test2(t *testing.T) {
+
+	files := util.GetAllFileName(`E:\test\test`)
+	resultFilePath := `e:\test\result.ts`
+	file, err := os.OpenFile(resultFilePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC,0644)
+	defer file.Close()
+	if err != nil {
+		 panic("合并异常:" + err.Error())
+	}
+	sum := 0
+
+	for _, v := range files {
+		tempBytes,err := ioutil.ReadFile(v)
+		if err != nil {
+			panic("合并异常:" + err.Error())
+		}
+		keyBytes,err := ioutil.ReadFile(`C:\h\av2\m3u8\all\pkpd00036.key`)
+		decryptBytes := util.AESDecrypt(tempBytes,keyBytes)
+		sum += len(decryptBytes)
+		_,err = file.Write(decryptBytes)
+		if err != nil {
+			panic("合并异常:" + err.Error())
+		}
+		myLog.Info("追加数据成功...")
+	}
+	resultBytes,err :=ioutil.ReadFile(resultFilePath)
+	if err != nil {
+		panic("异常:" + err.Error())
+	}
+	fmt.Println(len(resultBytes))
+	fmt.Println(sum)
+}
+
 
 /**
 下载 ts
@@ -219,7 +252,7 @@ func TestBatchProcess(t *testing.T) {
 		threadPool.Put(i,[]interface{}{item})
 	}
 	// 关闭
-	threadPool.Close()
+	threadPool.CloseQueue()
 	// 等待获取结果
 	waitGroup.Wait()
 	// 打结果

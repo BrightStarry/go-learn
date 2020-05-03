@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"sync"
+	"path"
 )
 
 /**
@@ -79,11 +80,28 @@ func main() {
 				}
 			}()
 			number := strings.Split(link,"/")[4]
-			myLog.Info("开始下载%s",number)
+
+
+			// 获取文件名
+			linkName := path.Base(link)
+			linkExt := path.Ext(link)
+			// 0 或者 1 2 3 ,为0 的时候就一个片段
+			fileOnlyName := strings.TrimRight(linkName,linkExt)
+
+
 
 			// 下载地址
-			m3u8Path := downloadDir + string(os.PathSeparator) +number+".m3u8"
-			keyPath := downloadDir + string(os.PathSeparator) +number+".key"
+			// 新名字，当只有一个片段时，为番号，多个片段，追加 _part1 2 3
+			var newFileNamePre string
+			if fileOnlyName == "0" {
+				newFileNamePre  = number
+			}else{
+				newFileNamePre  = number+"_part"+fileOnlyName
+			}
+			myLog.Info("开始下载%s",newFileNamePre)
+
+			m3u8Path := downloadDir + string(os.PathSeparator)+newFileNamePre  + ".m3u8"
+			keyPath := downloadDir + string(os.PathSeparator)+newFileNamePre  + ".key"
 			err := downloadFunc(m3u8Path,link)
 			if err != nil {
 				myLog.Error("当前:%s,下载m3u8异常:%v",number,err)
@@ -100,14 +118,14 @@ func main() {
 				myLog.Error("读取m3u8文件异常:%v",err)
 				return
 			}
-			m3u8Str := strings.Replace(string(m3u8Bytes),"key.bin","file@" +keyDir +string(os.PathSeparator)+number+".key",1)
+			m3u8Str := strings.Replace(string(m3u8Bytes),"key.bin","file@" +keyDir +string(os.PathSeparator)+newFileNamePre+".key",1)
 
 			err = ioutil.WriteFile(m3u8Path,[]byte(m3u8Str),0666)
 			if err!= nil {
 				myLog.Error("写入m3u8文件异常:%v",err)
 				return
 			}
-			myLog.Info("%s处理完成.",number)
+			myLog.Info("%s处理完成.",newFileNamePre)
 		}()
 	}
 

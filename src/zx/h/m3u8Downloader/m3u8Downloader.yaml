@@ -1,0 +1,11 @@
+# 同时下载数，开启几个aria2命令行
+threadNum: 5
+# aria2路径
+#aria2Path: ./aria2c.exe
+aria2Path: E:\m3u8Downloader\aria2c.exe
+#日志类型:  0:标准输出; 1:文件
+logType: 1
+# 是否清理临时文件,包括 上次运行日志;上次成功队列;上次失败队列;队列备份等 0:不清理; 1:清理
+isClean: 1
+# aria2下载参数设置,参照官方文档 https://aria2.github.io/manual/en/html/aria2c.html#options
+aria2Args: ["-j","128","-x", "512", "-m", "0", "-s", "1024", "--deferred-input=true"]

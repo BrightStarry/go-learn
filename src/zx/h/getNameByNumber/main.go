@@ -44,6 +44,8 @@ func main() {
 		}
 		getParam("exit")
 	}()
+	// 长度限制
+	lenLimit := 240
 
 	// 获取外部参数
 	//importExtParam()
@@ -108,7 +110,27 @@ func main() {
 				if avName == "" {
 					continue
 				}
+				// todo 是否保留原名
 				newFileName = avName + "~" + fileName
+
+				// 如果包含~, 按照特定规则处理
+				//if strings.Contains(fileName, "~") {
+				//	fileNameArr := strings.Split(fileName, "~")
+				//	// 这种情况下没有分段
+				//	if len(fileNameArr) < 3 {
+				//		newFileName = avName + filepath.Ext(fileName)
+				//	}else if len(fileNameArr) == 3 {
+				//		// 新名字加上影片分段
+				//		newFileName = avName + fileNameArr[1] + filepath.Ext(fileName)
+				//	}else{
+				//		myLog.Warn("文件名包含'~',但非 dmm番号转常规番号工具 转换而来，无法处理:" + fileName)
+				//		return
+				//	}
+				//} else{
+				//	// 不是用自己的dmm番号转普通番号转换而来的文件名。保留原名
+				//	newFileName = avName + "~" + fileName
+				//}
+
 			}
 
 			if avName == "" {
@@ -119,6 +141,19 @@ func main() {
 			// 替换特殊字符
 			for i := 0; i< len(keyword);i++  {
 				newFileName = strings.Replace(newFileName,keyword[i]," ",-1)
+			}
+
+
+			/**
+				处理长度限制
+				保留20个字符,将超出的替换成"……"
+			 */
+			if len(newFileName) > lenLimit{
+				// 差值
+				diff := len(newFileName) - lenLimit + len("……")
+				// 截取开始索引
+				startIndex := 50
+				newFileName = strings.TrimRight(newFileName[:startIndex],"�") + "……" + strings.TrimLeft(newFileName[startIndex + diff:],"�")
 			}
 
 			err2 := os.Rename(currentdir + fileName, currentdir + newFileName)

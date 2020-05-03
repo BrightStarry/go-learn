@@ -567,7 +567,7 @@ func TestMediaPlaylistWinsize(t *testing.T) {
 }
 
 // Create new media playlist as sliding playlist.
-// Close it.
+// CloseQueue it.
 func TestClosedMediaPlaylist(t *testing.T) {
 	p, e := NewMediaPlaylist(1, 10)
 	if e != nil {

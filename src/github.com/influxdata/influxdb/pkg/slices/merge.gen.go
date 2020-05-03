@@ -341,7 +341,7 @@ func MergeSortedBytes(n ...[][]byte) [][]byte {
 	idxs := make([]int, len(n)) // Indexes we've processed.
 	var j int                   // Index we currently think is minimum.
 
-	var cmp int // Result of comparing most recent value.
+	var cmp int // ResultQueue of comparing most recent value.
 
 	for {
 		j = -1

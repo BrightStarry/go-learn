@@ -20,7 +20,7 @@ func server() {
 	addr := "0.0.0.0:8081"
 	var listener, err = net.Listen("tcp", addr)
 	util.LogError(err, "服务端启动失败", err)
-	//defer listener.Close()
+	//defer listener.CloseQueue()
 
 	go serverAccept(listener)
 
