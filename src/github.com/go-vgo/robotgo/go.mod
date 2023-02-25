@@ -13,7 +13,7 @@ require (
 	github.com/vcaesar/tt v0.0.0-20190713164158-ecee6bc61ac7
 	golang.org/x/image v0.0.0-20190910094157-69e4b8554b2a
 	golang.org/x/net v0.0.0-20190724013045-ca1201d0de80 // indirect
-	golang.org/x/sys v0.0.0-20190912141932-bc967efca4b8 // indirect
+	golang.org/x/sys v0.1.0 // indirect
 )
 
 //replace golang.org/x/sys => github.com/golang/sys v0.0.0-20190109145017-48ac38b7c8cb
